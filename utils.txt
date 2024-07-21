@@ -74,3 +74,16 @@ docker run --network=karma_network -d --name karma_db karma_db
 
 docker build -f docker/karma_api/Dockerfile.int -t karma_api .
 docker run -p 8000:8000 --network=karma_network -d --name karma_api karma_api
+
+
+### LAUCNH TESTS PYTEST
+
+docker exec -it karma_api bash -c "python3 -m pytest test_rakuten_api.py"
+
+docker exec -it karma_api bash
+python3 -m pytest test_rakuten_api.py
+
+
+
+
+docker-compose -f docker/docker-compose-karma-int.yml down

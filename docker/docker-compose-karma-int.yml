@@ -1,4 +1,3 @@
-version: "3.9"
 services:
   karma_api:
     image: karma_api:latest

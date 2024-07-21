@@ -6,6 +6,8 @@
 
 ### Local launch of Karma app
 - Get in karma directory
+- ACTUELLEMENT, LES SECRETS SONT GERES VIA UN FICHIER IGNORE DANS GITHUB.
+POUR UNE CREATION LOCALE DEPUIS setup_int ou _prod, IL FAUT DONC CREER UN DOSSIER DANS KARMA NOMME ignore et y ajouter le fichier secret.env que je vous fournirai
 - Execute shell setup ~/karma$> ./setup_int.sh 0 (ou 1) !! Don't use sh to launch shell, because some list are used in the file
 Using 1 will rebuild all images, no matter if they already exists
 - try a call : curl -X GET -i http://KARMA_API_IP_ADDRESS:8000/karma_healthcheck
@@ -50,6 +52,9 @@ Using 1 will rebuild all images, no matter if they already exists
         - _buffer  
             - _image (Image buffer directory for exchange between containers)  
         - karma.env (Environment variable values, not secured only)  
+    - _ github (Used as shared Volume for containers)  
+        - _workflows  
+            - push_prod.yml (When push or PR on main branch of the project)  
     - _README.md   
     - _setup_int.sh (One script to rule them all, in integration environment)  
     - _setup_prod.sh (One script to rule them all, in prod environment) **TO DO**  
