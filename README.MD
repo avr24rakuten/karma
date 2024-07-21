@@ -14,42 +14,42 @@ Using 1 will rebuild all images, no matter if they already exists
 
 **karma Directory must be the root directory**
 
-_karma
-    |_docker (contains needed Docker files)
-        |_karma_api (Main front API container)
-            Dockerfile.int (Integration environment Dockerfile)
-            Dockerfile.prod (Prod environment Dockerfile) **TO DO**
-            requirements.txt
-        |_karma_db (MySQL database container)
-            Dockerfile.int (Integration environment Dockerfile)
-            Dockerfile.prod (Prod environment Dockerfile) **TO DO**
-            SQL files init : Common for all containers, _int for integration environment, _prod for prod environment
-        |_karma_model (ML model computing container)
-            Dockerfile.int (Integration environment Dockerfile)
-            Dockerfile.prod (Prod environment Dockerfile) **TO DO**
-            requirements.txt
-        docker-compose-karma-int.yml (Integration environment Docker compose file)
-        docker-compose-karma-prod.yml (Prod environment Docker compose file) **TO DO**
-    |_front_api (Main front API code)
-        |_lib
-            Project local python libraries
-        rakuten_api.py (Main python file)
-        test_rakuten_api.py (Pytest python file)
-    |_model_api (Main model computing and API exposure code)
-        |_lib
-            Project local python libraries
-        |_features
-            PytProjecthon file for model features
-        |_models
-            Model and config files
-        model_api.py (Main python file)
-        test_model_api.py (Pytest python file) **TO DO**
-    |_ shared (Used as shared Volume for containers)
-        |_lib 
-            Project shared python libraries
-        |_buffer
-            |_image (Image buffer directory for exchange between containers)
-        karma.env (Environment variable values, not secured only)
-    _README.md 
-    _setup_int.sh (One script to rule them all, in integration environment)
-    _setup_prod.sh (One script to rule them all, in prod environment) **TO DO**
+_karma  
+    |_docker (contains needed Docker files)  
+        |_karma_api (Main front API container)  
+            Dockerfile.int (Integration environment Dockerfile)  
+            Dockerfile.prod (Prod environment Dockerfile) **TO DO**  
+            requirements.txt  
+        |_karma_db (MySQL database container)  
+            Dockerfile.int (Integration environment Dockerfile)  
+            Dockerfile.prod (Prod environment Dockerfile) **TO DO**  
+            SQL files init : Common for all containers, _int for integration environment, _prod for prod environment  
+        |_karma_model (ML model computing container)  
+            Dockerfile.int (Integration environment Dockerfile)  
+            Dockerfile.prod (Prod environment Dockerfile) **TO DO**  
+            requirements.txt  
+        docker-compose-karma-int.yml (Integration environment Docker compose file)  
+        docker-compose-karma-prod.yml (Prod environment Docker compose file) **TO DO**  
+    |_front_api (Main front API code)  
+        |_lib  
+            Project local python libraries  
+        rakuten_api.py (Main python file)  
+        test_rakuten_api.py (Pytest python file)  
+    |_model_api (Main model computing and API exposure code)  
+        |_lib  
+            Project local python libraries  
+        |_features  
+            PytProjecthon file for model features  
+        |_models  
+            Model and config files  
+        model_api.py (Main python file)  
+        test_model_api.py (Pytest python file) **TO DO**  
+    |_ shared (Used as shared Volume for containers)  
+        |_lib  
+            Project shared python libraries  
+        |_buffer  
+            |_image (Image buffer directory for exchange between containers)  
+        karma.env (Environment variable values, not secured only)  
+    _README.md  
+    _setup_int.sh (One script to rule them all, in integration environment)  
+    _setup_prod.sh (One script to rule them all, in prod environment) **TO DO**  
