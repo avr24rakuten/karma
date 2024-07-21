@@ -53,8 +53,11 @@ done
 
 # VOLUME HANDLING
 echo "...:: Suppression/Creation du volume"
+if docker volume ls | grep -q 'karma_shared_volume'; then
+    echo "Volume karma_shared_volume already exists and will be removed"
     docker volume rm karma_shared_volume
-    docker volume create --driver local --opt type=none --opt device=~/karma/shared/ --opt o=bind karma_shared_volume
+fi
+docker volume create --driver local --opt type=none --opt device=~/karma/shared/ --opt o=bind karma_shared_volume || { echo "karma_shared_volume Volume creation failed"; exit 1; }
 
 # NETWORK CREATION IF NEEDED
 if docker network ls | grep -q 'karma_network'; then
