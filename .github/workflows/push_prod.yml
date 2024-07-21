@@ -1,6 +1,6 @@
 name: Push Prod
 on:
-  push:
+  pull_request:
     branches:
       - main
 
