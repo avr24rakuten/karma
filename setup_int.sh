@@ -69,39 +69,39 @@ else
 fi
 
 
-# IMAGES HANDLING
-for KARMA_IMAGE in "${KARMA_IMAGES[@]}"; do
-    echo "...:: ${KARMA_IMAGE} docker image"
-    if docker image ls | grep -q "${KARMA_IMAGE}"; then
-        echo "Image '${KARMA_IMAGE}' already exists"
-        if [ "$img_reboot" -eq 1 ]; then
-            echo "Reboot Option Activated : Existing image remove..."
-            docker image rm $KARMA_IMAGE:latest
-            if [ "$KARMA_IMAGE" = "karma_api" ]; then
-                if [ -f ignore/secret.env ]; then
-                    docker image build --build-arg SECRET_JWT_KEY=$(grep SECRET_JWT_KEY ignore/secret.env | cut -d '=' -f2) -f docker/${KARMA_IMAGE}/Dockerfile.int -t ${KARMA_IMAGE}:latest . || { echo "Image creation failed"; exit 1; } 
-                else
-                    docker image build --build-arg SECRET_JWT_KEY=$SECRET_JWT_KEY -f docker/${KARMA_IMAGE}/Dockerfile.int -t ${KARMA_IMAGE}:latest . || { echo "Image creation failed"; exit 1; }
-                fi 
-            else
-                docker image build -f docker/${KARMA_IMAGE}/Dockerfile.int -t ${KARMA_IMAGE}:latest . || { echo "Image creation failed"; exit 1; } 
-            fi
-        fi
-    else
-        echo "Image build '$KARMA_IMAGE'"
-        if [ "$KARMA_IMAGE" = "karma_api" ]; then
-            if [ -f ignore/secret.env ]; then
-                docker image build --build-arg SECRET_JWT_KEY=$(grep SECRET_JWT_KEY ignore/secret.env | cut -d '=' -f2) -f docker/${KARMA_IMAGE}/Dockerfile.int -t ${KARMA_IMAGE}:latest . || { echo "Image creation failed"; exit 1; } 
-            else
-                docker image build --build-arg SECRET_JWT_KEY=$SECRET_JWT_KEY -f docker/${KARMA_IMAGE}/Dockerfile.int -t ${KARMA_IMAGE}:latest . || { echo "Image creation failed"; exit 1; }
-            fi
-        else
-            docker image build -f docker/${KARMA_IMAGE}/Dockerfile.int -t ${KARMA_IMAGE}:latest . || { echo "'$KARMA_IMAGE' image creation failed"; exit 1; } 
-        fi
-    fi
-done
+# # IMAGES HANDLING
+# for KARMA_IMAGE in "${KARMA_IMAGES[@]}"; do
+#     echo "...:: ${KARMA_IMAGE} docker image"
+#     if docker image ls | grep -q "${KARMA_IMAGE}"; then
+#         echo "Image '${KARMA_IMAGE}' already exists"
+#         if [ "$img_reboot" -eq 1 ]; then
+#             echo "Reboot Option Activated : Existing image remove..."
+#             docker image rm $KARMA_IMAGE:latest
+#             if [ "$KARMA_IMAGE" = "karma_api" ]; then
+#                 if [ -f ignore/secret.env ]; then
+#                     docker image build --build-arg SECRET_JWT_KEY=$(grep SECRET_JWT_KEY ignore/secret.env | cut -d '=' -f2) -f docker/${KARMA_IMAGE}/Dockerfile.int -t ${KARMA_IMAGE}:latest . || { echo "Image creation failed"; exit 1; } 
+#                 else
+#                     docker image build --build-arg SECRET_JWT_KEY=$SECRET_JWT_KEY -f docker/${KARMA_IMAGE}/Dockerfile.int -t ${KARMA_IMAGE}:latest . || { echo "Image creation failed"; exit 1; }
+#                 fi 
+#             else
+#                 docker image build -f docker/${KARMA_IMAGE}/Dockerfile.int -t ${KARMA_IMAGE}:latest . || { echo "Image creation failed"; exit 1; } 
+#             fi
+#         fi
+#     else
+#         echo "Image build '$KARMA_IMAGE'"
+#         if [ "$KARMA_IMAGE" = "karma_api" ]; then
+#             if [ -f ignore/secret.env ]; then
+#                 docker image build --build-arg SECRET_JWT_KEY=$(grep SECRET_JWT_KEY ignore/secret.env | cut -d '=' -f2) -f docker/${KARMA_IMAGE}/Dockerfile.int -t ${KARMA_IMAGE}:latest . || { echo "Image creation failed"; exit 1; } 
+#             else
+#                 docker image build --build-arg SECRET_JWT_KEY=$SECRET_JWT_KEY -f docker/${KARMA_IMAGE}/Dockerfile.int -t ${KARMA_IMAGE}:latest . || { echo "Image creation failed"; exit 1; }
+#             fi
+#         else
+#             docker image build -f docker/${KARMA_IMAGE}/Dockerfile.int -t ${KARMA_IMAGE}:latest . || { echo "'$KARMA_IMAGE' image creation failed"; exit 1; } 
+#         fi
+#     fi
+# done
 
 
-# LAUNCH DOCKER COMPOSE, FastAPI en -d 
-echo "...:: Docker compose start..."
-docker-compose -f docker/docker-compose-karma-int.yml up -d
+# # LAUNCH DOCKER COMPOSE, FastAPI en -d 
+# echo "...:: Docker compose start..."
+# docker-compose -f docker/docker-compose-karma-int.yml up -d
