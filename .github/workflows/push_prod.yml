@@ -12,6 +12,8 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Run Bash Setup Integration Script
+        env:
+          SECRET_JWT_KEY: ${{ secrets.SECRET_JWT_KEY }}
         run: ./setup_int.sh 1
 
       - name: Run Pytest
