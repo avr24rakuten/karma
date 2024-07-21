@@ -57,7 +57,7 @@ if docker volume ls | grep -q 'karma_shared_volume'; then
     echo "Volume karma_shared_volume already exists and will be removed"
     docker volume rm karma_shared_volume
 fi
-docker volume create --driver local --opt type=none --opt device=~/karma/shared/ --opt o=bind karma_shared_volume || { echo "karma_shared_volume Volume creation failed"; exit 1; }
+docker volume create --driver local --opt type=none --opt device=shared/ --opt o=bind karma_shared_volume || { echo "karma_shared_volume Volume creation failed"; exit 1; }
 
 # NETWORK CREATION IF NEEDED
 echo "...:: Suppression/Creation du network"
@@ -78,25 +78,25 @@ for KARMA_IMAGE in "${KARMA_IMAGES[@]}"; do
             echo "Reboot Option Activated : Existing image remove..."
             docker image rm $KARMA_IMAGE:latest
             if [ "$KARMA_IMAGE" = "karma_api" ]; then
-                if [ -f ~/karma/ignore/secret.env ]; then
-                    docker image build --build-arg SECRET_JWT_KEY=$(grep SECRET_JWT_KEY ~/karma/ignore/secret.env | cut -d '=' -f2) -f ~/karma/docker/${KARMA_IMAGE}/Dockerfile.int -t ${KARMA_IMAGE}:latest . || { echo "Image creation failed"; exit 1; } 
+                if [ -f ignore/secret.env ]; then
+                    docker image build --build-arg SECRET_JWT_KEY=$(grep SECRET_JWT_KEY ignore/secret.env | cut -d '=' -f2) -f docker/${KARMA_IMAGE}/Dockerfile.int -t ${KARMA_IMAGE}:latest . || { echo "Image creation failed"; exit 1; } 
                 else
-                    docker image build --build-arg SECRET_JWT_KEY=$SECRET_JWT_KEY -f ~/karma/docker/${KARMA_IMAGE}/Dockerfile.int -t ${KARMA_IMAGE}:latest . || { echo "Image creation failed"; exit 1; }
+                    docker image build --build-arg SECRET_JWT_KEY=$SECRET_JWT_KEY -f docker/${KARMA_IMAGE}/Dockerfile.int -t ${KARMA_IMAGE}:latest . || { echo "Image creation failed"; exit 1; }
                 fi 
             else
-                docker image build -f ~/karma/docker/${KARMA_IMAGE}/Dockerfile.int -t ${KARMA_IMAGE}:latest . || { echo "Image creation failed"; exit 1; } 
+                docker image build -f docker/${KARMA_IMAGE}/Dockerfile.int -t ${KARMA_IMAGE}:latest . || { echo "Image creation failed"; exit 1; } 
             fi
         fi
     else
         echo "Image build '$KARMA_IMAGE'"
         if [ "$KARMA_IMAGE" = "karma_api" ]; then
-            if [ -f ~/karma/ignore/secret.env ]; then
-                docker image build --build-arg SECRET_JWT_KEY=$(grep SECRET_JWT_KEY ~/karma/ignore/secret.env | cut -d '=' -f2) -f ~/karma/docker/${KARMA_IMAGE}/Dockerfile.int -t ${KARMA_IMAGE}:latest . || { echo "Image creation failed"; exit 1; } 
+            if [ -f ignore/secret.env ]; then
+                docker image build --build-arg SECRET_JWT_KEY=$(grep SECRET_JWT_KEY ignore/secret.env | cut -d '=' -f2) -f docker/${KARMA_IMAGE}/Dockerfile.int -t ${KARMA_IMAGE}:latest . || { echo "Image creation failed"; exit 1; } 
             else
-                docker image build --build-arg SECRET_JWT_KEY=$SECRET_JWT_KEY -f ~/karma/docker/${KARMA_IMAGE}/Dockerfile.int -t ${KARMA_IMAGE}:latest . || { echo "Image creation failed"; exit 1; }
+                docker image build --build-arg SECRET_JWT_KEY=$SECRET_JWT_KEY -f docker/${KARMA_IMAGE}/Dockerfile.int -t ${KARMA_IMAGE}:latest . || { echo "Image creation failed"; exit 1; }
             fi
         else
-            docker image build -f ~/karma/docker/${KARMA_IMAGE}/Dockerfile.int -t ${KARMA_IMAGE}:latest . || { echo "'$KARMA_IMAGE' image creation failed"; exit 1; } 
+            docker image build -f docker/${KARMA_IMAGE}/Dockerfile.int -t ${KARMA_IMAGE}:latest . || { echo "'$KARMA_IMAGE' image creation failed"; exit 1; } 
         fi
     fi
 done
