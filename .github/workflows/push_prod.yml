@@ -19,8 +19,7 @@ jobs:
         run: ./setup_int.sh 1
 
       - name: Run Pytest
-        run: |
-          docker exec -it karma_api bash -c "python3 -m pytest test_rakuten_api.py"
+        run: docker exec karma_api bash -c "python3 -m pytest test_rakuten_api.py"
 
       - name: Docker Compose Down
         run: docker-compose -f docker/docker-compose-karma-int.yml down
