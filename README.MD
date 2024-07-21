@@ -1,13 +1,13 @@
-...:: POUR LANCER LES DIFFERENTES MACHINES EN INTEGRATION ::...
-UN TEST COMME CA
-...:: Utils For Docker 
+# ...:: POUR LANCER LES DIFFERENTES MACHINES EN INTEGRATION ::...
+
+## ...:: Utils For Docker 
 
 docker create network karma_network
 
 docker volume rm karma_shared_volume
 docker volume create --driver local --opt type=none --opt device=~/karma/shared/ --opt o=bind karma_shared_volume
 
-...:: Reboot Image DB Int
+## ...:: Reboot Image DB Int
 
 docker container rm karma_db
 docker image rm karma_db
