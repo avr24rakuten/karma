@@ -1,8 +1,8 @@
 # Official ubuntu image
 FROM ubuntu:20.04
 
-COPY karma/docker/karma_model/requirements.txt ./
-COPY karma/model_api ./app/
+COPY docker/karma_model/requirements.txt ./
+COPY model_api ./app/
 
 RUN apt update && apt install python3-pip -y && pip install -r requirements.txt
 RUN apt-get install -y curl

@@ -5,8 +5,8 @@ FROM mysql:latest
 ENV MYSQL_ROOT_PASSWORD=root_prod
 
 # SQL init script
-COPY karma/docker/karma_db/init_common.sql /docker-entrypoint-initdb.d/
-COPY karma/docker/karma_db/init_prod.sql /docker-entrypoint-initdb.d/
+COPY docker/karma_db/init_common.sql /docker-entrypoint-initdb.d/
+COPY docker/karma_db/init_prod.sql /docker-entrypoint-initdb.d/
 
 # docker build -f Dockerfile.prod -t docker_db .
 # docker run --name docker_db:latest -e MYSQL_ROOT_PASSWORD=root_prod -d docker_db
