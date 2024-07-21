@@ -78,7 +78,7 @@ for KARMA_IMAGE in "${KARMA_IMAGES[@]}"; do
             echo "Reboot Option Activated : Existing image remove..."
             docker image rm $KARMA_IMAGE:latest
             if [ "$KARMA_IMAGE" = "karma_api" ]; then
-                if [ -f ~/karma/ignore/secret.env ]; then
+                if [ -f ignore/secret.env ]; then
                     docker image build --build-arg SECRET_JWT_KEY=$(grep SECRET_JWT_KEY ~/karma/ignore/secret.env | cut -d '=' -f2) -f ~/karma/docker/${KARMA_IMAGE}/Dockerfile.int -t ${KARMA_IMAGE}:latest . || { echo "Image creation failed"; exit 1; } 
                 else
                     docker image build --build-arg SECRET_JWT_KEY=$SECRET_JWT_KEY -f ~/karma/docker/${KARMA_IMAGE}/Dockerfile.int -t ${KARMA_IMAGE}:latest . || { echo "Image creation failed"; exit 1; }
@@ -90,7 +90,7 @@ for KARMA_IMAGE in "${KARMA_IMAGES[@]}"; do
     else
         echo "Image build '$KARMA_IMAGE'"
         if [ "$KARMA_IMAGE" = "karma_api" ]; then
-            if [ -f ~/karma/ignore/secret.env ]; then
+            if [ -f ignore/secret.env ]; then
                 docker image build --build-arg SECRET_JWT_KEY=$(grep SECRET_JWT_KEY ~/karma/ignore/secret.env | cut -d '=' -f2) -f ~/karma/docker/${KARMA_IMAGE}/Dockerfile.int -t ${KARMA_IMAGE}:latest . || { echo "Image creation failed"; exit 1; } 
             else
                 docker image build --build-arg SECRET_JWT_KEY=$SECRET_JWT_KEY -f ~/karma/docker/${KARMA_IMAGE}/Dockerfile.int -t ${KARMA_IMAGE}:latest . || { echo "Image creation failed"; exit 1; }
