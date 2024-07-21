@@ -64,7 +64,12 @@ if docker volume ls | grep -q 'karma_shared_volume'; then
     docker volume rm karma_shared_volume
 fi
 echo "karma_shared_volume Volume creation"
-docker volume create --driver local --opt type=none --opt device=/home/$CURRENT_USER/karma/shared/ --opt o=bind karma_shared_volume || { echo "karma_shared_volume Volume creation failed"; exit 1; }
+if [ -f ignore/secret.env ]; then
+    docker volume create --driver local --opt type=none --opt device=/home/$CURRENT_USER/karma/shared/ --opt o=bind karma_shared_volume || { echo "karma_shared_volume Volume creation failed"; exit 1; }
+else
+    docker volume create --driver local --opt type=none --opt device=/home/$CURRENT_USER/work/karma/karma/shared/ --opt o=bind karma_shared_volume || { echo "karma_shared_volume Volume creation failed"; exit 1; }
+fi 
+
 
 # NETWORK CREATION IF NEEDED
 echo "...:: Suppression/Creation du network"
