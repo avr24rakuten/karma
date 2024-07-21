@@ -6,6 +6,7 @@ img_reboot=${1:-0}
 # OTHER VARIABLES
 KARMA_IMAGES=("karma_api" "karma_db" "karma_model")
 CONTAINER_NAMES=("karma_api" "karma_db" "karma_model")
+CURRENT_USER=$(whoami)
 
 # DOCKER PREREQUISITES
 echo "...:: Démarrage de Docker"
@@ -58,7 +59,7 @@ if docker volume ls | grep -q 'karma_shared_volume'; then
     docker volume rm karma_shared_volume
 fi
 echo "karma_shared_volume Volume creation"
-docker volume create --driver local --opt type=none --opt device=/shared/ --opt o=bind karma_shared_volume || { echo "karma_shared_volume Volume creation failed"; exit 1; }
+docker volume create --driver local --opt type=none --opt device=/home/$CURRENT_USER/karma/shared/ --opt o=bind karma_shared_volume || { echo "karma_shared_volume Volume creation failed"; exit 1; }
 
 # NETWORK CREATION IF NEEDED
 echo "...:: Suppression/Creation du network"
