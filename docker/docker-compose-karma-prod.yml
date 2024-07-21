@@ -1,0 +1,30 @@
+services:
+  karma_api:
+    image: karma_api:latest
+    container_name: karma_api
+    networks:
+      - karma_network
+    ports:
+      - 8000:8000
+    volumes:
+      - karma_shared_volume:/app/shared
+  karma_db:
+    image: karma_db:latest
+    container_name: karma_db
+    networks:
+      - karma_network
+    volumes:
+      - karma_shared_volume:/app/shared
+  karma_model:
+    image: karma_model:latest
+    container_name: karma_model
+    networks:
+      - karma_network
+    volumes:
+      - karma_shared_volume:/app/shared
+networks:
+  karma_network:
+volumes:
+  karma_shared_volume:
+    external: true
+    name: karma_shared_volume

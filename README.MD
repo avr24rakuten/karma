@@ -31,7 +31,7 @@ Using 1 will rebuild all images, no matter if they already exists
             - Dockerfile.prod (Prod environment Dockerfile) **TO DO**  
             - requirements.txt  
         - docker-compose-karma-int.yml (Integration environment Docker compose file)  
-        - docker-compose-karma-prod.yml (Prod environment Docker compose file) **TO DO**  
+        - docker-compose-karma-prod.yml (Prod environment Docker compose file)
     - _front_api (Main front API code)  
         - _lib  
             - Project local python libraries  
