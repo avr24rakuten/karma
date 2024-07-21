@@ -1,0 +1,11 @@
+fastapi==0.111.1
+sqlalchemy==2.0.31
+mysql-client==0.0.1
+uvicorn==0.30.1
+mysqlclient==2.1.1
+pyjwt==2.8.0
+# passlib==1.7.4
+passlib[bcrypt]
+requests==2.31.0
+python-dotenv==1.0.1
+pytest

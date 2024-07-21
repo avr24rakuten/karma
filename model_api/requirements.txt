@@ -1,0 +1,7 @@
+tensorflow==2.13.0
+numpy==1.24.3
+pandas==2.0.3
+nltk==3.8.1
+beautifulsoup4==4.12.2
+keras==2.13.1
+Pillow==10.0.0

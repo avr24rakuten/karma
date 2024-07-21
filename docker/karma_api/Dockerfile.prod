@@ -1,0 +1,21 @@
+# Official ubuntu image
+FROM ubuntu:20.04
+
+# ADD ARGUMENT FOR DOCKER IMAGE BUILD
+ARG SECRET_JWT_KEY
+# CREATE ENV VARIABLE AVAILABLE FOR KARMA
+ENV SECRET_JWT_KEY=$SECRET_JWT_KEY
+
+ENV MYSQL_ROOT_PASSWORD=root_prod
+
+COPY karma/docker/karma_api/requirements.txt ./
+COPY karma/front_api ./app/
+
+RUN apt update && apt install python3-pip libmysqlclient-dev -y && pip install -r requirements.txt
+RUN apt-get install -y curl
+
+EXPOSE 8000
+
+WORKDIR /app
+
+CMD uvicorn rakuten_api:server --host 0.0.0.0

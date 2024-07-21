@@ -1,0 +1,9 @@
+# Official Mysql image
+FROM mysql:latest
+
+# environment variable with MYSQL_ROOT_PASSWORD
+ENV MYSQL_ROOT_PASSWORD=root_int
+
+# SQL init script
+COPY karma/docker/karma_db/init_common.sql /docker-entrypoint-initdb.d/
+COPY karma/docker/karma_db/init_int.sql /docker-entrypoint-initdb.d/
