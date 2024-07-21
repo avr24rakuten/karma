@@ -10,8 +10,8 @@ docker volume create --driver local --opt type=none --opt device=~/karma/shared/
 ...:: Image karma_db
 
 
-docker build -f karma/docker/karma_db/Dockerfile.prod -t karma_db .
-docker build -f karma/docker/karma_db/Dockerfile.int -t karma_db .
+docker build -f docker/karma_db/Dockerfile.prod -t karma_db .
+docker build -f docker/karma_db/Dockerfile.int -t karma_db .
 
 
 # ProdSSWORD DANS LE DOCKERFILE POUR LE MOMENT
@@ -30,7 +30,7 @@ docker container rm karma_db
 
 docker container rm karma_db
 docker image rm karma_db
-docker build -f karma/docker/karma_db/Dockerfile.int -t karma_db .
+docker build -f docker/karma_db/Dockerfile.int -t karma_db .
 docker run --network=karma_network -d --name karma_db karma_db
 docker exec -it karma_db bash
 
@@ -38,17 +38,17 @@ docker exec -it karma_db bash
 
 docker container rm karma_db
 docker image rm karma_db
-docker build -f karma/docker/karma_db/Dockerfile.prod -t karma_db .
+docker build -f docker/karma_db/Dockerfile.prod -t karma_db .
 docker run --network=karma_network -d --name karma_db karma_db
 
 
 ...:: Reboot Image API Int
 # !!!! Version sans SECRET_JWT_KEY
-docker build -f karma/docker/karma_api/Dockerfile.int -t karma_api .
+docker build -f docker/karma_api/Dockerfile.int -t karma_api .
 
 docker container rm karma_api
 docker image rm karma_api
-docker build --build-arg SECRET_JWT_KEY=$(grep SECRET_JWT_KEY ~/karma/ignore/secret.env | cut -d '=' -f2) -f karma/docker/karma_api/Dockerfile.int -t karma_api .
+docker build --build-arg SECRET_JWT_KEY=$(grep SECRET_JWT_KEY ~/karma/ignore/secret.env | cut -d '=' -f2) -f docker/karma_api/Dockerfile.int -t karma_api .
 docker run -p 8000:8000 -v karma_shared_volume:/app/shared --network=karma_network -d --name karma_api karma_api
 docker exec -it karma_api bash
 
@@ -57,7 +57,7 @@ docker exec -it karma_api bash
 
 docker container rm karma_model
 docker image rm karma_model
-docker build -f karma/docker/karma_model/Dockerfile.int -t karma_model .
+docker build -f docker/karma_model/Dockerfile.int -t karma_model .
 docker run -v karma_shared_volume:/app/shared --network=karma_network -d --name karma_model karma_model
 docker exec -it karma_model bash
 
@@ -66,11 +66,11 @@ docker exec -it karma_model bash
 
 
 
-...:: LAUNCH API containerS
+...:: LAUNCH API containers
 
 docker network create karma_network
 
 docker run --network=karma_network -d --name karma_db karma_db
 
-docker build -f karma/docker/karma_api/Dockerfile.int -t karma_api .
+docker build -f docker/karma_api/Dockerfile.int -t karma_api .
 docker run -p 8000:8000 --network=karma_network -d --name karma_api karma_api

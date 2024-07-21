@@ -9,8 +9,8 @@ ENV SECRET_JWT_KEY=$SECRET_JWT_KEY
 ENV MYSQL_ROOT_PASSWORD=root_int
 
 
-COPY karma/docker/karma_api/requirements.txt ./
-COPY karma/front_api ./app/
+COPY docker/karma_api/requirements.txt ./
+COPY front_api ./app/
 
 RUN apt update && apt install python3-pip libmysqlclient-dev -y && pip install -r requirements.txt
 RUN apt-get install -y curl
