@@ -4,14 +4,13 @@
 
 ### Get the code
 
-
 ### Local launch of Karma app
 - Get in karma directory
 - Execute shell setup ~/karma$> ./setup_int.sh 0 (ou 1) !! Don't use sh to launch shell, because some list are used in the file
 Using 1 will rebuild all images, no matter if they already exists
 - try a call : curl -X GET -i http://KARMA_API_IP_ADDRESS:8000/karma_healthcheck
 
-## CODE ORGANISATION
+## Code organisation
 
 **karma Directory must be the root directory**
 
