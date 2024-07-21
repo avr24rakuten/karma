@@ -27,20 +27,8 @@ else
     exit 1
 fi
 
-# VOLUME HANDLING
-echo "...:: Suppression/Creation du volume"
-    docker volume rm karma_shared_volume
-    docker volume create --driver local --opt type=none --opt device=~/karma/shared/ --opt o=bind karma_shared_volume
 
-# NETWORK CREATION IF NEEDED
-if docker network ls | grep -q 'karma_network'; then
-    echo "Network karma_network already exists"
-else
-    echo "karma_network Network creation"
-    docker create network karma_network || { echo "karma_network Network creation failed"; exit 1; }
-fi
-
-echo "...:: Containers status check"
+echo "...:: Containers status check and stop if needed"
 # For each container in upper list
 for CONTAINER_NAME in "${CONTAINER_NAMES[@]}"; do
 
@@ -62,6 +50,19 @@ for CONTAINER_NAME in "${CONTAINER_NAMES[@]}"; do
     echo "Container $CONTAINER_NAME doesn't exist"
   fi
 done
+
+# VOLUME HANDLING
+echo "...:: Suppression/Creation du volume"
+    docker volume rm karma_shared_volume
+    docker volume create --driver local --opt type=none --opt device=~/karma/shared/ --opt o=bind karma_shared_volume
+
+# NETWORK CREATION IF NEEDED
+if docker network ls | grep -q 'karma_network'; then
+    echo "Network karma_network already exists"
+else
+    echo "karma_network Network creation"
+    docker create network karma_network || { echo "karma_network Network creation failed"; exit 1; }
+fi
 
 
 # IMAGES HANDLING
