@@ -60,11 +60,12 @@ fi
 docker volume create --driver local --opt type=none --opt device=~/karma/shared/ --opt o=bind karma_shared_volume || { echo "karma_shared_volume Volume creation failed"; exit 1; }
 
 # NETWORK CREATION IF NEEDED
+echo "...:: Suppression/Creation du network"
 if docker network ls | grep -q 'karma_network'; then
     echo "Network karma_network already exists"
 else
     echo "karma_network Network creation"
-    docker create network karma_network || { echo "karma_network Network creation failed"; exit 1; }
+    docker network create karma_network || { echo "karma_network Network creation failed"; exit 1; }
 fi
 
 
