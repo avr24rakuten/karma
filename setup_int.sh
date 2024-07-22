@@ -6,6 +6,7 @@ img_reboot=${1:-0}
 # OTHER VARIABLES
 KARMA_IMAGES=("karma_api" "karma_db" "karma_model")
 CONTAINER_NAMES=("karma_api" "karma_db" "karma_model")
+CURRENT_USER=$(whoami)
 
 # DOCKER PREREQUISITES
 echo "...:: Démarrage de Docker"
@@ -51,13 +52,24 @@ for CONTAINER_NAME in "${CONTAINER_NAMES[@]}"; do
   fi
 done
 
+echo "...:: ON EST OU !?"
+echo $(pwd)
+
+
+
 # VOLUME HANDLING
 echo "...:: Suppression/Creation du volume"
 if docker volume ls | grep -q 'karma_shared_volume'; then
     echo "Volume karma_shared_volume already exists and will be removed"
     docker volume rm karma_shared_volume
 fi
-docker volume create --driver local --opt type=none --opt device=shared/ --opt o=bind karma_shared_volume || { echo "karma_shared_volume Volume creation failed"; exit 1; }
+echo "karma_shared_volume Volume creation"
+if [ -f ignore/secret.env ]; then
+    docker volume create --driver local --opt type=none --opt device=/home/$CURRENT_USER/karma/shared/ --opt o=bind karma_shared_volume || { echo "karma_shared_volume Volume creation failed"; exit 1; }
+else
+    docker volume create --driver local --opt type=none --opt device=/home/$CURRENT_USER/work/karma/karma/shared/ --opt o=bind karma_shared_volume || { echo "karma_shared_volume Volume creation failed"; exit 1; }
+fi 
+
 
 # NETWORK CREATION IF NEEDED
 echo "...:: Suppression/Creation du network"
@@ -70,6 +82,7 @@ fi
 
 
 # IMAGES HANDLING
+echo "...:: Images handling"
 for KARMA_IMAGE in "${KARMA_IMAGES[@]}"; do
     echo "...:: ${KARMA_IMAGE} docker image"
     if docker image ls | grep -q "${KARMA_IMAGE}"; then
@@ -79,9 +92,9 @@ for KARMA_IMAGE in "${KARMA_IMAGES[@]}"; do
             docker image rm $KARMA_IMAGE:latest
             if [ "$KARMA_IMAGE" = "karma_api" ]; then
                 if [ -f ignore/secret.env ]; then
-                    docker image build --build-arg SECRET_JWT_KEY=$(grep SECRET_JWT_KEY ignore/secret.env | cut -d '=' -f2) -f docker/${KARMA_IMAGE}/Dockerfile.int -t ${KARMA_IMAGE}:latest . || { echo "Image creation failed"; exit 1; } 
+                    docker image build --build-arg SECRET_JWT_KEY=$(grep SECRET_JWT_KEY ignore/secret.env | cut -d '=' -f2) --build-arg MYSQL_ROOT_PASSWORD=$(grep MYSQL_ROOT_PASSWORD_INT ignore/secret.env | cut -d '=' -f2) -f docker/${KARMA_IMAGE}/Dockerfile.int -t ${KARMA_IMAGE}:latest . || { echo "Image creation failed"; exit 1; } 
                 else
-                    docker image build --build-arg SECRET_JWT_KEY=$SECRET_JWT_KEY -f docker/${KARMA_IMAGE}/Dockerfile.int -t ${KARMA_IMAGE}:latest . || { echo "Image creation failed"; exit 1; }
+                    docker image build --build-arg SECRET_JWT_KEY=$SECRET_JWT_KEY --build-arg MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD_INT -f docker/${KARMA_IMAGE}/Dockerfile.int -t ${KARMA_IMAGE}:latest . || { echo "Image creation failed"; exit 1; }
                 fi 
             else
                 docker image build -f docker/${KARMA_IMAGE}/Dockerfile.int -t ${KARMA_IMAGE}:latest . || { echo "Image creation failed"; exit 1; } 
@@ -91,9 +104,9 @@ for KARMA_IMAGE in "${KARMA_IMAGES[@]}"; do
         echo "Image build '$KARMA_IMAGE'"
         if [ "$KARMA_IMAGE" = "karma_api" ]; then
             if [ -f ignore/secret.env ]; then
-                docker image build --build-arg SECRET_JWT_KEY=$(grep SECRET_JWT_KEY ignore/secret.env | cut -d '=' -f2) -f docker/${KARMA_IMAGE}/Dockerfile.int -t ${KARMA_IMAGE}:latest . || { echo "Image creation failed"; exit 1; } 
+                docker image build --build-arg SECRET_JWT_KEY=$(grep SECRET_JWT_KEY ignore/secret.env | cut -d '=' -f2) --build-arg MYSQL_ROOT_PASSWORD=$(grep MYSQL_ROOT_PASSWORD_INT ignore/secret.env | cut -d '=' -f2) -f docker/${KARMA_IMAGE}/Dockerfile.int -t ${KARMA_IMAGE}:latest . || { echo "Image creation failed"; exit 1; } 
             else
-                docker image build --build-arg SECRET_JWT_KEY=$SECRET_JWT_KEY -f docker/${KARMA_IMAGE}/Dockerfile.int -t ${KARMA_IMAGE}:latest . || { echo "Image creation failed"; exit 1; }
+                docker image build --build-arg SECRET_JWT_KEY=$SECRET_JWT_KEY --build-arg MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD_INT -f docker/${KARMA_IMAGE}/Dockerfile.int -t ${KARMA_IMAGE}:latest . || { echo "Image creation failed"; exit 1; }
             fi
         else
             docker image build -f docker/${KARMA_IMAGE}/Dockerfile.int -t ${KARMA_IMAGE}:latest . || { echo "'$KARMA_IMAGE' image creation failed"; exit 1; } 
