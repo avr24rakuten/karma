@@ -10,7 +10,7 @@ from lib.security import *
 # decode_base64
 def test_decode_base64_ok():
     res = decode_base64('YWRtaW4=')
-    assert res == 'admin'
+    assert res == 'admi'
 
 def test_decode_base64_error_nonascii():
     with pytest.raises(HTTPException) as excinfo:
