@@ -87,3 +87,63 @@ python3 -m pytest test_rakuten_api.py
 
 
 docker-compose -f docker/docker-compose-karma-int.yml down
+
+
+
+#########################################
+# DOCKER HUB SECTION
+#########################################
+
+docker login
+# Taggez et poussez l'image karma_api
+docker tag karma_api:latest avr24rakuten/karma:karma_api
+docker push avr24rakuten/karma:karma_api
+
+# Taggez et poussez l'image karma_db
+docker tag karma_db:latest avr24rakuten/karma:karma_db
+docker push avr24rakuten/karma:karma_db
+
+# Taggez et poussez l'image karma_model
+docker tag karma_model:latest avr24rakuten/karma:karma_model
+docker push avr24rakuten/karma:karma_model
+
+POUR SUPPRIMER UN TAG : docker rmi avr24rakuten/karma:latest
+
+
+
+Pour PUSH DEPUIS gitHub actions des images vers DockerHub : 
+docker login registry-1.docker.io -u avr24rakuten
+
+
+name: Docker Build and Push
+
+on:
+  push:
+    branches:
+      - main  # Remplacez par la branche de votre choix
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+
+    - name: Login to DockerHub
+      uses: docker/login-action@v1 
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    - name: Build and push Docker images
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        file: ./Dockerfile
+        push: true
+        tags: avr24rakuten/karma_api:latest, avr24rakuten/karma_db:latest
+
