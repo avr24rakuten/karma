@@ -52,11 +52,6 @@ for CONTAINER_NAME in "${CONTAINER_NAMES[@]}"; do
   fi
 done
 
-echo "...:: ON EST OU !?"
-echo $(pwd)
-
-
-
 # VOLUME HANDLING
 echo "...:: Suppression/Creation du volume"
 if docker volume ls | grep -q 'karma_shared_volume'; then
