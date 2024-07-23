@@ -5,7 +5,7 @@ on:
       - main
 
 jobs:
-  test:
+  pr_to_main:
     runs-on: ubuntu-latest
     steps:
       - name: Login to Docker Hub
@@ -42,6 +42,12 @@ jobs:
 
       - name: API Tests Step (Pytest)
         run: docker exec karma_test_int bash -c "python3 -m pytest test_func_int.py"
+
+      - name: Container API Test Stop
+        run: |
+            docker container rm karma_test_int || true
+            docker container rm karma_test_int || true
+            docker image rm karma_test_int || true
 
       - name: Docker Compose Down
         run: docker-compose -f docker/docker-compose-karma-int.yml down

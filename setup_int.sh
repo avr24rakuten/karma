@@ -17,7 +17,7 @@ BUILD_ARGS["karma_db"]="MYSQL_ROOT_PASSWORD=MYSQL_ROOT_PASSWORD_INT"
 echo "...:: Démarrage de Docker"
 if [ -x "$(command -v docker)" ]; then
     echo "Docker installed. Docker start handling..."
-        # Vérifie si Docker est en cours d'exécution pour éviter le sudo et la saisie du password utilisateur
+        # Check if Docker is running to avoid password sudo prompt
         if docker info >/dev/null 2>&1; then
             echo "Docker already running"
         else
@@ -128,6 +128,6 @@ for KARMA_IMAGE in "${KARMA_IMAGES[@]}"; do
     fi
 done
 
-# LAUNCH DOCKER COMPOSE, FastAPI en -d 
+# LAUNCH DOCKER COMPOSE
 echo "...:: Docker compose start..."
 docker-compose -f docker/docker-compose-karma-int.yml up -d
