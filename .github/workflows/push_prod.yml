@@ -17,10 +17,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # - name: Get host IP deprecated
-      #   id: hostip
-      #   run: echo "::set-output name=ip::$(hostname -I | awk '{print $1}')"
-
       - name: Get host IP
         id: hostip
         run: echo "HOST_IP=$(hostname -I | awk '{print $1}')" >> $GITHUB_ENV
@@ -44,7 +40,7 @@ jobs:
           HOST_IP: ${{ env.HOST_IP }}
         run: ./setup_test_int.sh
 
-      - name: API Step (Pytest)
+      - name: API Tests Step (Pytest)
         run: docker exec karma_test_int bash -c "python3 -m pytest test_func_int.py"
 
       - name: Docker Compose Down

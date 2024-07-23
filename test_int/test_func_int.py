@@ -1,5 +1,6 @@
 import pytest
 import os
+import json
 import sys
 import requests
 
@@ -23,7 +24,33 @@ def test_get_karma_healthcheck():
 # LOGIN
 #############################################
 
+def test_get_login_ok():
+    url = "http://172.26.107.175:8000/users/login"
+    headers = {
+        "accept": "application/json",
+        "Content-Type": "application/json",
+    }
+    data = {
+        "username": "admin",
+        "password": "YWRtaW4=",
+    }
 
+    response = requests.post(url, headers=headers, data=json.dumps(data))
+    assert response.status_code == 200
+
+def test_get_login_ko_not64base():
+    url = "http://172.26.107.175:8000/users/login"
+    headers = {
+        "accept": "application/json",
+        "Content-Type": "application/json",
+    }
+    data = {
+        "username": "admin",
+        "password": "YWRtaW=",
+    }
+
+    response = requests.post(url, headers=headers, data=json.dumps(data))
+    assert response.status_code == 400
 
 #############################################
 # PREDICT
