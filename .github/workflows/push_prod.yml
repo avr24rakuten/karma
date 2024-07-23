@@ -17,6 +17,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Get host IP
+        id: hostip
+        run: echo "::set-output name=ip::$(hostname -I | awk '{print $1}')"
+
       - name: Run Bash Setup Integration Script
         env:
           SECRET_JWT_KEY: ${{ secrets.SECRET_JWT_KEY }}
@@ -33,6 +37,7 @@ jobs:
       - name: Run Bash Setup Test Integration Script
         env:
           MYSQL_ROOT_PASSWORD_INT: ${{ secrets.MYSQL_ROOT_PASSWORD_INT }}
+          HOST_IP: ${{ steps.hostip.outputs.ip }}
         run: ./setup_test_int.sh
 
       - name: API Step (Pytest)
