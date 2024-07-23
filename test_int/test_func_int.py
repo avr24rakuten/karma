@@ -25,7 +25,7 @@ def test_get_karma_healthcheck():
 #############################################
 
 def test_get_login_ok():
-    url = "http://172.26.107.175:8000/users/login"
+    url = "http://{}:8000/users/login".format(host_ip)
     headers = {
         "accept": "application/json",
         "Content-Type": "application/json",
@@ -39,7 +39,7 @@ def test_get_login_ok():
     assert response.status_code == 200
 
 def test_get_login_ko_not64base():
-    url = "http://172.26.107.175:8000/users/login"
+    url = "http://{}:8000/users/login".format(host_ip)
     headers = {
         "accept": "application/json",
         "Content-Type": "application/json",
