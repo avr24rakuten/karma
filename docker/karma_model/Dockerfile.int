@@ -1,10 +1,10 @@
 # Official ubuntu image
-FROM ubuntu:20.04
+FROM avr24rakuten/karma:karma_base
 
 COPY docker/karma_model/requirements.txt ./
 COPY model_api ./app/
 
-RUN apt update && apt install python3-pip -y && pip install -r requirements.txt
+RUN apt update && pip install -r requirements.txt
 RUN apt-get install -y curl
 
 EXPOSE 8081

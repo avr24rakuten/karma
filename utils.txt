@@ -63,6 +63,26 @@ docker exec -it karma_model bash
 
 
 
+...:: Reboot Image TEST INF
+
+docker container rm karma_test_int
+docker image rm karma_test_int
+docker build -f docker/karma_test_int/Dockerfile -t karma_test_int .
+docker run -d --name karma_test_int karma_test_int
+docker exec -it karma_test_int bash
+
+
+
+
+...:: PUSH ON Dockerhub Image karma_base
+
+#docker container rm karma_base
+#docker image rm karma_base
+docker build -f docker/karma_base/Dockerfile -t karma_base .
+docker run -d --name karma_base karma_base
+#docker exec -it karma_test_int bash
+
+
 
 
 
@@ -106,6 +126,12 @@ docker push avr24rakuten/karma:karma_db
 # Taggez et poussez l'image karma_model
 docker tag karma_model:latest avr24rakuten/karma:karma_model
 docker push avr24rakuten/karma:karma_model
+
+# Taggez et poussez l'image karma_base
+docker tag karma_base:latest avr24rakuten/karma:karma_base
+docker push avr24rakuten/karma:karma_base
+
+
 
 POUR SUPPRIMER UN TAG : docker rmi avr24rakuten/karma:latest
 

@@ -39,7 +39,7 @@ fi
 # DOCKER COMPOSE PREREQUISITES
 echo "...:: Contrôle de Docker Compose"
 if [ -x "$(command -v docker)" ]; then
-    echo "Docker Compose est installé ..."
+    echo "Docker Compose installed ..."
 else
     echo "Docker Compose not installed, follow instructions on : https://docs.docker.com/compose/install/"
     exit 1
@@ -127,40 +127,6 @@ for KARMA_IMAGE in "${KARMA_IMAGES[@]}"; do
         eval $BUILD_CMD || { echo "Image creation failed"; exit 1; }
     fi
 done
-
-# # IMAGES HANDLING BUILD
-# echo "...:: Images build handling"
-# for KARMA_IMAGE in "${KARMA_IMAGES[@]}"; do
-#     echo "...:: ${KARMA_IMAGE} docker image"
-#     if docker image ls | grep -q "${KARMA_IMAGE}"; then
-#         echo "Image '${KARMA_IMAGE}' already exists"
-#         # if [ "$img_reboot" -eq 1 ]; then
-#         #     echo "Reboot Option Activated : Existing image remove..."
-#         #     docker image rm $KARMA_IMAGE:latest
-#         #     if [ "$KARMA_IMAGE" = "karma_api" ]; then
-#         #         if [ -f ignore/secret.env ]; then
-#         #             docker image build --build-arg SECRET_JWT_KEY=$(grep SECRET_JWT_KEY ignore/secret.env | cut -d '=' -f2) --build-arg MYSQL_ROOT_PASSWORD=$(grep MYSQL_ROOT_PASSWORD_INT ignore/secret.env | cut -d '=' -f2) -f docker/${KARMA_IMAGE}/Dockerfile.int -t ${KARMA_IMAGE}:latest . || { echo "Image creation failed"; exit 1; } 
-#         #         else
-#         #             docker image build --build-arg SECRET_JWT_KEY=$SECRET_JWT_KEY --build-arg MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD_INT -f docker/${KARMA_IMAGE}/Dockerfile.int -t ${KARMA_IMAGE}:latest . || { echo "Image creation failed"; exit 1; }
-#         #         fi 
-#         #     else
-#         #         docker image build -f docker/${KARMA_IMAGE}/Dockerfile.int -t ${KARMA_IMAGE}:latest . || { echo "Image creation failed"; exit 1; } 
-#         #     fi
-#         # fi
-#     else
-#         echo "Image build '$KARMA_IMAGE'"
-#         if [ "$KARMA_IMAGE" = "karma_api" ]; then
-#             if [ -f ignore/secret.env ]; then
-#                 docker image build --build-arg SECRET_JWT_KEY=$(grep SECRET_JWT_KEY ignore/secret.env | cut -d '=' -f2) --build-arg MYSQL_ROOT_PASSWORD=$(grep MYSQL_ROOT_PASSWORD_INT ignore/secret.env | cut -d '=' -f2) -f docker/${KARMA_IMAGE}/Dockerfile.int -t ${KARMA_IMAGE}:latest . || { echo "Image creation failed"; exit 1; } 
-#             else
-#                 docker image build --build-arg SECRET_JWT_KEY=$SECRET_JWT_KEY --build-arg MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD_INT -f docker/${KARMA_IMAGE}/Dockerfile.int -t ${KARMA_IMAGE}:latest . || { echo "Image creation failed"; exit 1; }
-#             fi
-#         else
-#             docker image build -f docker/${KARMA_IMAGE}/Dockerfile.int -t ${KARMA_IMAGE}:latest . || { echo "'$KARMA_IMAGE' image creation failed"; exit 1; } 
-#         fi
-#     fi
-# done
-
 
 # LAUNCH DOCKER COMPOSE, FastAPI en -d 
 echo "...:: Docker compose start..."

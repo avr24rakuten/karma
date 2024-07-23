@@ -1,5 +1,5 @@
 # Official ubuntu image
-FROM ubuntu:20.04
+FROM avr24rakuten/karma:karma_base
 
 # ADD ARGUMENT FOR DOCKER IMAGE BUILD THEN CREATE ENV VARIABLE AVAILABLE FOR KARMA
 ARG SECRET_JWT_KEY
@@ -11,8 +11,7 @@ ENV MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
 COPY docker/karma_api/requirements.txt ./
 COPY front_api ./app/
 
-RUN apt update && apt install python3-pip libmysqlclient-dev -y && pip install -r requirements.txt
-RUN apt-get install -y curl
+RUN apt update && apt install -y libmysqlclient-dev curl && pip install -r requirements.txt
 
 EXPOSE 8000
 
