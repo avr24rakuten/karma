@@ -4,8 +4,6 @@ import json
 import sys
 import requests
 
-# from lib.mysql import *
-
 try:
     host_ip = os.environ.get('HOST_IP')
 except:
