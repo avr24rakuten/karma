@@ -128,6 +128,10 @@ for KARMA_IMAGE in "${KARMA_IMAGES[@]}"; do
     fi
 done
 
+docker tag karma_api:latest avr24rakuten/karma:karma_api
+docker tag karma_db:latest avr24rakuten/karma:karma_db
+docker tag karma_model:latest avr24rakuten/karma:karma_model
+
 # # LAUNCH DOCKER COMPOSE, FastAPI en -d 
 # echo "...:: Docker compose start..."
 # docker-compose -f docker/docker-compose-karma-int.yml up -d
