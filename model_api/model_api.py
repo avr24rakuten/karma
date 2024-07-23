@@ -48,5 +48,4 @@ async def predict(inputProduct: InputProduct):
         prediction = predictor.predict(inputProduct.description, inputProduct.image_link)
         return {prediction}
     except Exception as e:
-        # Distinguez entre les erreurs 400 et 500 ici !!! A PRECISER
         raise HTTPException(status_code=500, detail=str(e))

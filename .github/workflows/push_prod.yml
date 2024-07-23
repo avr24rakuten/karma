@@ -18,8 +18,19 @@ jobs:
           MYSQL_ROOT_PASSWORD_PROD: ${{ secrets.MYSQL_ROOT_PASSWORD_PROD }}
         run: ./setup_int.sh 1
 
-      - name: Run Pytest
+      - name: Unit Tests Step (Pytest)
         run: docker exec karma_api bash -c "python3 -m pytest test_rakuten_api.py"
 
       - name: Docker Compose Down
         run: docker-compose -f docker/docker-compose-karma-int.yml down
+
+      - name: Build Docker API Test Int Image
+        run: docker build -f docker/karma_test_int/Dockerfile -t karma_test_int .
+
+      - name: Run Bash Setup Test Integration Script
+        env:
+          MYSQL_ROOT_PASSWORD_INT: ${{ secrets.MYSQL_ROOT_PASSWORD_INT }}
+        run: ./setup_test_int.sh
+
+      - name: API Step (Pytest)
+        run: docker exec karma_test_int bash -c "python3 -m pytest test_func_int.py"
