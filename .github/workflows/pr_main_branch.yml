@@ -1,4 +1,4 @@
-name: Push Main Branch
+name: Push To Main Branch
 on:
   pull_request:
     branches:
