@@ -22,10 +22,10 @@ jobs:
             run: ./build_images_prod.sh
     
           - name: Push Docker image karma_api to Docker Hub
-            run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/karma:karma_api
+            run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/karma_api:latest
             
           - name: Push Docker image karma_db to Docker Hub
-            run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/karma:karma_db
+            run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/karma_db:latest
     
           - name: Push Docker image karma_model to Docker Hub
-            run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/karma:karma_model
+            run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/karma_model:latest

@@ -1,5 +1,5 @@
 # Official ubuntu image
-FROM avr24rakuten/karma:karma_base
+FROM avr24rakuten/karma_base:latest
 
 # ADD ARGUMENT FOR DOCKER IMAGE BUILD THEN CREATE ENV VARIABLE AVAILABLE FOR KARMA
 ARG SECRET_JWT_KEY

@@ -123,14 +123,14 @@ for KARMA_IMAGE in "${KARMA_IMAGES[@]}"; do
                 BUILD_CMD+=" --build-arg $ARG=${!VAR}"
             fi
         done
-        BUILD_CMD+=" -f docker/${KARMA_IMAGE}/Dockerfile.int -t ${KARMA_IMAGE}:latest ."
+        BUILD_CMD+=" -f docker/${KARMA_IMAGE}/Dockerfile.prod -t avr24rakuten/${KARMA_IMAGE}:latest ."
         eval $BUILD_CMD || { echo "Image creation failed"; exit 1; }
     fi
 done
 
-docker tag karma_api:latest avr24rakuten/karma:karma_api
-docker tag karma_db:latest avr24rakuten/karma:karma_db
-docker tag karma_model:latest avr24rakuten/karma:karma_model
+# docker tag karma_api:latest avr24rakuten/karma_api:latest
+# docker tag karma_db:latest avr24rakuten/karma_db:latest
+# docker tag karma_model:latest avr24rakuten/karma_model:latest
 
 # # LAUNCH DOCKER COMPOSE, FastAPI en -d 
 # echo "...:: Docker compose start..."
