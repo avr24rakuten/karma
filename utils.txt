@@ -134,3 +134,46 @@ docker push avr24rakuten/karma:karma_base
 
 
 POUR SUPPRIMER UN TAG : docker rmi avr24rakuten/karma:latest
+
+
+
+############################################
+# SSH ON LOCAL UBUNTU WSL2 FOR REMOTE ACCESS
+############################################
+
+
+sudo apt-get update
+sudo apt-get install openssh-server
+
+sudo nano /etc/ssh/sshd_config
+#Check if :
+PermitRootLogin no
+PasswordAuthentication yes
+
+sudo service ssh start
+# For start at host start 
+echo "sudo service ssh start" >> ~/.bashrc
+
+ip addr 
+OU hostname -I
+172.26.107.175
+
+sudo adduser karma because #root user prohibited
+ssh karma@172.26.107.175
+netuk@r_42rv@
+
+#Change user and get home
+su karma
+cd ~
+
+ssh-keygen -t rsa -b 4096 -C "avr24.rakuten@gmail.com"
+
+# Ajouter la clé à ssh-agent
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/id_rsa.pub
+
+
+############################################
+# GIT UTILS
+############################################
+
