@@ -31,9 +31,6 @@ jobs:
       - name: Unit Tests Step (Pytest)
         run: docker exec karma_api bash -c "python3 -m pytest test_rakuten_api.py"
 
-      # - name: Build Docker API Test Int Image
-      #   run: docker build -f docker/karma_test_int/Dockerfile -t karma_test_int .
-
       - name: Run Bash Setup Test Integration Script
         env:
           MYSQL_ROOT_PASSWORD_INT: ${{ secrets.MYSQL_ROOT_PASSWORD_INT }}
