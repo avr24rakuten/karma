@@ -114,10 +114,24 @@ docker-compose -f docker/docker-compose-karma-int.yml down
 # DOCKER HUB SECTION
 #########################################
 
+
 docker login
 # Taggez et poussez l'image karma_api
 docker tag karma_api:latest avr24rakuten/karma:karma_api
 docker push avr24rakuten/karma:karma_api
+
+# Taggez et poussez l'image karma_base
+docker tag karma_base:latest avr24rakuten/karma_base:latest
+OU
+docker tag karma_base:latest karma_base:latest
+
+docker push avr24rakuten/karma_base:latest
+avr24rakuten/karma
+
+
+
+
+
 
 # Taggez et poussez l'image karma_db
 docker tag karma_db:latest avr24rakuten/karma:karma_db
@@ -127,9 +141,7 @@ docker push avr24rakuten/karma:karma_db
 docker tag karma_model:latest avr24rakuten/karma:karma_model
 docker push avr24rakuten/karma:karma_model
 
-# Taggez et poussez l'image karma_base
-docker tag karma_base:latest avr24rakuten/karma:karma_base
-docker push avr24rakuten/karma:karma_base
+
 
 
 
@@ -170,8 +182,9 @@ ssh-keygen -t rsa -b 4096 -C "avr24.rakuten@gmail.com"
 
 # Ajouter la clé à ssh-agent
 eval "$(ssh-agent -s)"
-ssh-add ~/.ssh/id_rsa.pub
+ssh-add ~/.ssh/id_rsa
 
+cat ~/.ssh/id_rsa.pub
 
 ############################################
 # GIT UTILS

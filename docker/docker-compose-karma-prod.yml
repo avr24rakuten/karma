@@ -1,6 +1,6 @@
 services:
   karma_api:
-    image: karma_api:latest
+    image: avr24rakuten/karma_api:latest
     container_name: karma_api
     networks:
       - karma_network
@@ -9,14 +9,14 @@ services:
     volumes:
       - karma_shared_volume:/app/shared
   karma_db:
-    image: karma_db:latest
+    image: avr24rakuten/karma_db:latest
     container_name: karma_db
     networks:
       - karma_network
     volumes:
       - karma_shared_volume:/app/shared
   karma_model:
-    image: karma_model:latest
+    image: avr24rakuten/karma_model:latest
     container_name: karma_model
     networks:
       - karma_network

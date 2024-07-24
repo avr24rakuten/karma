@@ -1,5 +1,5 @@
 # Official ubuntu image
-FROM avr24rakuten/karma:karma_base
+FROM avr24rakuten/karma_base:latest
 
 COPY docker/karma_model/requirements.txt ./
 COPY model_api ./app/
