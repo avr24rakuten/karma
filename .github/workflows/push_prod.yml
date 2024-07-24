@@ -1,4 +1,4 @@
-name: Push Prod
+name: Push Release To Prod
 on:
   release:
     types: [published]
