@@ -123,7 +123,7 @@ for KARMA_IMAGE in "${KARMA_IMAGES[@]}"; do
                 BUILD_CMD+=" --build-arg $ARG=${!VAR}"
             fi
         done
-        BUILD_CMD+=" -f docker/${KARMA_IMAGE}/Dockerfile.int -t avr24rakuten/${KARMA_IMAGE}:latest ."
+        BUILD_CMD+=" -f docker/${KARMA_IMAGE}/Dockerfile.prod -t avr24rakuten/${KARMA_IMAGE}:latest ."
         eval $BUILD_CMD || { echo "Image creation failed"; exit 1; }
     fi
 done

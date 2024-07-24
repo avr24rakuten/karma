@@ -1,0 +1,14 @@
+# Official ubuntu image
+FROM avr24rakuten/karma_base:latest
+
+COPY docker/karma_model/requirements.txt ./
+COPY model_api ./app/
+
+RUN apt update && pip install -r requirements.txt
+RUN apt-get install -y curl
+
+EXPOSE 8081
+
+WORKDIR /app
+
+CMD uvicorn model_api:server --host 0.0.0.0 --port 8081
