@@ -36,62 +36,6 @@ else
     exit 1
 fi
 
-# # DOCKER COMPOSE PREREQUISITES
-# echo "...:: Contrôle de Docker Compose"
-# if [ -x "$(command -v docker)" ]; then
-#     echo "Docker Compose installed ..."
-# else
-#     echo "Docker Compose not installed, follow instructions on : https://docs.docker.com/compose/install/"
-#     exit 1
-# fi
-
-
-# echo "...:: Containers status check and stop if needed"
-# # For each container in upper list
-# for CONTAINER_NAME in "${CONTAINER_NAMES[@]}"; do
-
-#   # Check if container exists
-#   if [ $(docker ps -a -f name=$CONTAINER_NAME | grep -w $CONTAINER_NAME | wc -l) -gt 0 ]; then
-#     echo "Container $CONTAINER_NAME exists"
-
-#     # Check if container is running
-#     if [ $(docker ps -f name=$CONTAINER_NAME | grep -w $CONTAINER_NAME | wc -l) -gt 0 ]; then
-#       echo "Container $CONTAINER_NAME is running, stop it ..."
-#       docker stop $CONTAINER_NAME || { echo "Stop container $CONTAINER_NAME failed"; exit 1; }
-#     fi
-
-#     echo "Container $CONTAINER_NAME remove..."
-#     docker rm $CONTAINER_NAME || { echo "Container $CONTAINER_NAME remove failed"; exit 1; }
-
-#     echo "Container $CONTAINER_NAME removed"
-#   else
-#     echo "Container $CONTAINER_NAME doesn't exist"
-#   fi
-# done
-
-# # VOLUME HANDLING
-# echo "...:: Suppression/Creation du volume"
-# if docker volume ls | grep -q 'karma_shared_volume'; then
-#     echo "Volume karma_shared_volume already exists and will be removed"
-#     docker volume rm karma_shared_volume
-# fi
-# echo "karma_shared_volume Volume creation"
-# if [ -f ignore/secret.env ]; then
-#     docker volume create --driver local --opt type=none --opt device=/home/$CURRENT_USER/karma/shared/ --opt o=bind karma_shared_volume || { echo "karma_shared_volume Volume creation failed"; exit 1; }
-# else
-#     docker volume create --driver local --opt type=none --opt device=/home/$CURRENT_USER/work/karma/karma/shared/ --opt o=bind karma_shared_volume || { echo "karma_shared_volume Volume creation failed"; exit 1; }
-# fi 
-
-
-# # NETWORK CREATION IF NEEDED
-# echo "...:: Suppression/Creation du network"
-# if docker network ls | grep -q 'karma_network'; then
-#     echo "Network karma_network already exists"
-# else
-#     echo "karma_network Network creation"
-#     docker network create karma_network || { echo "karma_network Network creation failed"; exit 1; }
-# fi
-
 # IMAGES HANDLING IF REBOOT : REMOVE IF EXIST FOR EACH
 echo "...:: Images Reboot Mode handling"
 if [ "$img_reboot" -eq 1 ]; then
@@ -127,11 +71,3 @@ for KARMA_IMAGE in "${KARMA_IMAGES[@]}"; do
         eval $BUILD_CMD || { echo "Image creation failed"; exit 1; }
     fi
 done
-
-# docker tag karma_api:latest avr24rakuten/karma_api:latest
-# docker tag karma_db:latest avr24rakuten/karma_db:latest
-# docker tag karma_model:latest avr24rakuten/karma_model:latest
-
-# # LAUNCH DOCKER COMPOSE, FastAPI en -d 
-# echo "...:: Docker compose start..."
-# docker-compose -f docker/docker-compose-karma-int.yml up -d
