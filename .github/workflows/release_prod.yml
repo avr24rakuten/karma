@@ -1,10 +1,10 @@
-name: Push Prod
+name: New Prod Release
 on:
   release:
     types: [published]
 
 jobs:
-  new_realease:
+  new_prod_realease:
     runs-on: ubuntu-latest
     steps:
       - name: Login to Docker Hub
