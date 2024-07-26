@@ -37,6 +37,7 @@ def test_decode_base64_error_nonutf8encoded():
 # LOCAL CLASS
 #############################################
 
+# TESTS CLASS : InputUser
 def test_input_user_initialization():
     user = "test_user"
     password = "test_password"
@@ -55,3 +56,31 @@ def test_input_user_invalid_roles():
 
     with pytest.raises(ValidationError):
         input_user = InputUser(user=user, password=password, roles=roles)
+
+# TESTS CLASS : User
+def test_user_initialization():
+    user = User(user_id=1, user="test_user", hashed_password="hashed_password", admin=True, steward=False, reader=True)
+
+    assert user.user_id == 1
+    assert user.user == "test_user"
+    assert user.hashed_password == "hashed_password"
+    assert user.admin == True
+    assert user.steward == False
+    assert user.reader == True
+
+def test_user_invalid_role_type():
+    with pytest.raises(ValidationError):
+        user = User(user_id=1, user="test_user", hashed_password="hashed_password", admin="not a boolean", steward=False, reader=True)
+
+
+# TESTS FUNCTION : convert_user_to_input_user
+def test_convert_user_to_input_user():
+    user = User(user_id=1, user="test_user", hashed_password="hashed_password", admin=True, steward=False, reader=True)
+
+    input_user = convert_user_to_input_user(user)
+
+    assert input_user.user == user.user
+    assert input_user.password == user.hashed_password
+    assert input_user.roles == {'admin': user.admin, 'steward': user.steward, 'reader': user.reader}
+
+
