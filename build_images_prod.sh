@@ -67,7 +67,11 @@ for KARMA_IMAGE in "${KARMA_IMAGES[@]}"; do
                 BUILD_CMD+=" --build-arg $ARG=${!VAR}"
             fi
         done
-        BUILD_CMD+=" -f docker/${KARMA_IMAGE}/Dockerfile.prod -t avr24rakuten/${KARMA_IMAGE}:${RELEASE_TAG} ."
+        echo $RELEASE_TAG
+        TAG=${RELEASE_TAG:-latest}
+        echo "RELEASE TAG PLACE"
+        echo $TAG
+        BUILD_CMD+=" -f docker/${KARMA_IMAGE}/Dockerfile.prod -t avr24rakuten/${KARMA_IMAGE}:${TAG} ."
         eval $BUILD_CMD || { echo "Image creation failed"; exit 1; }
     fi
 done
