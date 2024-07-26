@@ -104,9 +104,9 @@ def get_any_role(user: User = Depends(get_current_user)):
     return user
 
 def hash_password(password):
-    # Générer un sel
+    # Generate a salt
     salt = bcrypt.gensalt()
-    # Hacher le mot de passe avec le sel
+    # Password hash with salt
     hashed_password = bcrypt.hashpw(password.encode(), salt)
     return hashed_password.decode()
 

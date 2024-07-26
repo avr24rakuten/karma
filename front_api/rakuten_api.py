@@ -76,7 +76,7 @@ async def karma_healthcheck():
             status_results[api_url] = "Failed to connect"
 
     # Check if karma Database vailable
-    status_results['karma_db'] = 'OK' if test_database_connection() else 'Unavailable'
+    status_results['karma_db'] = 'OK' if check_database_connection() else 'Unavailable'
 
     # Vérifiez si toutes les API sont disponibles
     if all(status == "OK" for status in status_results.values()):
