@@ -75,7 +75,7 @@ def test_get_login_ko_wrongpassword():
     }
 
     response = requests.post(url, headers=headers, data=json.dumps(data))
-    assert response.status_code == 400
+    assert response.status_code == 401
     assert response.json() == {"detail":"Incorrect username or password"}
 
 #############################################
@@ -97,5 +97,5 @@ def test_delete_user_ok():
     }
 
     response = requests.delete(url, headers=headers)
-    assert response.status_code == 400
+    assert response.status_code == 200
     assert response.json() == {"detail":"User delete successfully deleted"}
