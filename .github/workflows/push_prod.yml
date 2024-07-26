@@ -19,6 +19,8 @@ jobs:
               ref: main
     
           - name: Run Bash Build Docker Images
+            env:
+              RELEASE_TAG: ${{ github.event.release.tag_name }}
             run: ./build_images_prod.sh
     
           - name: Push Docker image karma_api to Docker Hub
@@ -30,17 +32,17 @@ jobs:
           - name: Push Docker image karma_model to Docker Hub
             run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/karma_model:${{ github.event.release.tag_name }}
 
-          - name: Copy docker-compose file and shared, create network and volume and start services
-            uses: appleboy/ssh-action@master
-            with:
-              host: ${{ secrets.PROD_HOST_ARNO }}
-              username: ${{ secrets.PROD_USERNAME }}
-              key: ${{ secrets.PROD_SSH_KEY_ARNO }}
-              script: |
-                cp /docker/docker-compose-karma-prod.yml /app/docker-compose.yml
-                cp /shared /app
-                cd /app
-                docker create network karma_network
-                docker volume create --driver local --opt type=none --opt device=~/app/shared/ --opt o=bind karma_shared_volume
-                docker-compose pull
-                docker-compose up -d
+          # - name: Copy docker-compose file and shared, create network and volume and start services
+          #   uses: appleboy/ssh-action@master
+          #   with:
+          #     host: ${{ secrets.PROD_HOST_ARNO }}
+          #     username: ${{ secrets.PROD_USERNAME }}
+          #     key: ${{ secrets.PROD_SSH_KEY_ARNO }}
+          #     script: |
+          #       cp /docker/docker-compose-karma-prod.yml /app/docker-compose.yml
+          #       cp /shared /app
+          #       cd /app
+          #       docker create network karma_network
+          #       docker volume create --driver local --opt type=none --opt device=~/app/shared/ --opt o=bind karma_shared_volume
+          #       docker-compose pull
+          #       docker-compose up -d
