@@ -22,13 +22,13 @@ jobs:
             run: ./build_images_prod.sh
     
           - name: Push Docker image karma_api to Docker Hub
-            run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/karma_api:latest
+            run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/karma_api:${{ github.event.release.tag_name }}
             
           - name: Push Docker image karma_db to Docker Hub
-            run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/karma_db:latest
+            run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/karma_db:${{ github.event.release.tag_name }}
     
           - name: Push Docker image karma_model to Docker Hub
-            run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/karma_model:latest
+            run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/karma_model:${{ github.event.release.tag_name }}
 
           - name: Copy docker-compose file and shared, create network and volume and start services
             uses: appleboy/ssh-action@master
