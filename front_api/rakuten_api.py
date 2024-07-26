@@ -76,7 +76,7 @@ async def karma_healthcheck():
             status_results[api_url] = "Failed to connect"
 
     # Check if karma Database vailable
-    status_results['karma_db'] = 'OK' if test_database_connection() else 'Unavailable'
+    status_results['karma_db'] = 'OK' if check_database_connection() else 'Unavailable'
 
     # Vérifiez si toutes les API sont disponibles
     if all(status == "OK" for status in status_results.values()):
@@ -313,20 +313,28 @@ async def delete_user(user: str, admin: User = Depends(get_admin)):
 
     engine = get_engine()
     with engine.connect() as connection:
-        statement = text('DELETE FROM users WHERE users.user = :user')
-        try:
-            connection.execute(statement,{"user": user})
-            # Default rollback behavior with alchemy, so commit change !!!!
-            connection.commit()
-        except ValueError:
-            connection.rollback()
+
+        select_statement = text('SELECT * FROM users WHERE users.user = :user')
+        result = connection.execute(select_statement, {"user": user})
+        user_exists = result.fetchone() is not None
+        if user_exists:
+            statement = text('DELETE FROM users WHERE users.user = :user')
+            try:
+                connection.execute(statement,{"user": user})
+                # Default rollback behavior with alchemy, so commit change !!!!
+                connection.commit()
+            except ValueError:
+                connection.rollback()
+                raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="SQL Error"
+            )
+        else:
             raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Erreur SQL"
-        )
-        # A METTRE ERREUR SQL PERSONNALISEE
-    # return {'DELETE FROM users WHERE users.user = ''{user}'''.format(user=user)}
-    return {"detail": "User successfully deleted"}
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="User {} not found".format(user)
+            )
+    return {"detail": "User {} successfully deleted".format(user)}
 
 
 @server.get('/users/{user_id:int}', response_model=InputUser, tags=['users'])

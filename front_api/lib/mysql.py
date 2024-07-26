@@ -32,7 +32,7 @@ def get_engine():
 
     return create_engine(connection_url)
 
-def test_database_connection():
+def check_database_connection():
     """
     Check if karma mysql connection is available, return True or False
 
@@ -41,7 +41,7 @@ def test_database_connection():
 
     Example
     -------
-    test_database_connection()
+    check_database_connection()
     """
     try:
         engine = get_engine()
