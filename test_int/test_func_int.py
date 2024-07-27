@@ -172,16 +172,11 @@ def test_create_user_no_privilege():
     headers = {
         "accept": "application/json",
         "Content-Type": "application/json",
-        "Authorization": "Bearer {}".format(token_reader),
+        "Authorization": "Bearer {}".format(token_admin),
     }
     data = {
         "user": "test",
         "password": "dGVzdA==",
-        "roles": {
-            "admin": False,
-            "steward": False,
-            "reader": False
-        }
     }
     response = requests.post(url, headers=headers, data=json.dumps(data))
     assert response.status_code == 400
@@ -192,7 +187,7 @@ def test_create_user_no_password():
     headers = {
         "accept": "application/json",
         "Content-Type": "application/json",
-        "Authorization": "Bearer {}".format(token_reader),
+        "Authorization": "Bearer {}".format(token_admin),
     }
     data = {
         "user": "test",
@@ -217,8 +212,8 @@ def test_create_user_reader_ok():
         "Content-Type": "application/json",
     }
     data = {
-        "user": user,
-        "password": password
+        "user": "{}".format(user),
+        "password": "{}".format(password)
     }
     response = requests.post(url, headers=headers, data=json.dumps(data))
 
@@ -243,8 +238,7 @@ def test_create_user_reader_no_password():
     url = "http://{}:8000/users".format(host_ip)
     headers = {
         "accept": "application/json",
-        "Content-Type": "application/json",
-        "Authorization": "Bearer {}".format(token_reader),
+        "Content-Type": "application/json"
     }
     data = {
         "user": "test_reader"
@@ -297,7 +291,7 @@ def test_update_user_bad_data():
     headers = {
         "accept": "application/json",
         "Content-Type": "application/json",
-        "Authorization": "Bearer {}".format(token_reader),
+        "Authorization": "Bearer {}".format(token_admin),
     }
     data = {
         "user": "test",
