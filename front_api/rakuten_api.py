@@ -83,7 +83,7 @@ async def karma_healthcheck():
         return {"status": 200, "message": "All Karma Components are OK"}
     else:
         unavailable_comp = [comp for comp, status in status_results.items() if status != "OK"]
-        return {"status": 200, "message": f"The following components are not available: {unavailable_comp}"}
+        return {"status": 500, "message": f"The following components are not available: {unavailable_comp}"}
         # FAUT-IL RENVOYER UNE ERREUR, JE NE PENSE PAS CAR L'APPEL API EST OK FINALEMENT 
         # raise HTTPException(status_code=400, detail=f"The following components are not available: {unavailable_comp}")
 
@@ -171,6 +171,7 @@ async def login_for_access_token(in_user: LoginUser) -> Token:
 async def create_user(user: InputUser, admin: User = Depends(get_admin)):
     """
     Admin only : User creation from user input. Unprovided roles will lead to a false value for the privilege, 1 role at least is mandatory
+    Password is mandatory
 
     Parameters
     ----------
@@ -189,6 +190,11 @@ async def create_user(user: InputUser, admin: User = Depends(get_admin)):
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="One privilege at least is required for user creation"
         )
+    elif not user.password :
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Password is mandatory"
+        )
     else:
         hashed_password = hash_password(decode_base64(user.password))
         engine = get_engine()
@@ -198,6 +204,47 @@ async def create_user(user: InputUser, admin: User = Depends(get_admin)):
             sql += ") VALUES (:user, :hashed_password, "
             sql += ", ".join([f"{'true' if status else 'false'}" for role, status in user.roles.items()])
             sql += f")"
+            statement = text(sql)
+            try:
+                connection.execute(statement,{"user": user.user, "hashed_password": hashed_password})
+                # Default rollback behavior with alchemy, so commit change !!!!
+                connection.commit()
+            except ValueError:
+                connection.rollback()
+                raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Erreur SQL"
+                )
+        return {"detail": "User successfully created"}
+
+@server.post("/users/reader", tags=['users'])
+async def create_user_reader(user: InputUser):
+    """
+    User, reader only by default, creation from user input. No matter roles provided, created user will be reader role only
+    Password is mandatory
+
+    Parameters
+    ----------
+    user : InputUser class type expected with encoded base64 password
+
+    Example
+    -------
+    curl -X POST "http://ip_address:port/users/reader" 
+        -H  "accept: application/json" 
+        -H  "Content-Type: application/json" 
+        -H "Authorization: Bearer JWT_TOKEN_VALUE" 
+        -d "{\"user\":\"USER\",\"password\":\"BASE64_PASSWORD\"}"
+    """
+    if not user.password :
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Password is mandatory"
+        )
+    else:
+        hashed_password = hash_password(decode_base64(user.password))
+        engine = get_engine()
+        with engine.connect() as connection:
+            sql = "INSERT INTO users (user, hashed_password, admin, steward, reader) VALUES (:user, :hashed_password, false, false, true)"
             statement = text(sql)
             try:
                 connection.execute(statement,{"user": user.user, "hashed_password": hashed_password})
@@ -233,7 +280,7 @@ async def update_user(user: InputUser, admin: User = Depends(get_admin)):
     if len(user.roles) == 0:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="One role at least is required for user creation"
+            detail="One role at least is required for user update"
         )
     else:
         engine = get_engine()
@@ -332,7 +379,7 @@ async def delete_user(user: str, admin: User = Depends(get_admin)):
         else:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="User {} not found".format(user)
+                detail="Resources not found".format(user)
             )
     return {"detail": "User {} successfully deleted".format(user)}
 
@@ -389,26 +436,26 @@ async def get_user(user_id: int, admin: User = Depends(get_admin)):
 # PREDICT SECTION
 #############################################
 
-@server.post("/unsecured/products/predict_image", tags=['predict'])
-async def predict(description: str = Form(...), image: UploadFile = File(...)):
+# @server.post("/unsecured/products/predict_image", tags=['predict'])
+# async def predict(description: str = Form(...), image: UploadFile = File(...)):
 
-    if not description:
-        raise HTTPException(status_code=400, detail="Invalid input")
+#     if not description:
+#         raise HTTPException(status_code=400, detail="Description is mandatory")
 
-    if image:
-        image_contents = await image.read()
-        image_path = os.path.join("shared/buffer/image", image.filename)
-        with open(image_path, "wb") as f:
-                f.write(image_contents)
+#     if image:
+#         image_contents = await image.read()
+#         image_path = os.path.join("shared/buffer/image", image.filename)
+#         with open(image_path, "wb") as f:
+#                 f.write(image_contents)
 
-    item = InputProduct(description=description, image_link=image_path)
+#     item = InputProduct(description=description, image_link=image_path)
 
-    model_api_url = "http://karma_model:8081/predict"
-    response = requests.post(model_api_url, json=item.dict())
-    if response.status_code != 200:
-        return {"error": f"Failed to get prediction from model API: {response.text}"}
-    prediction = response.json()
-    return {"prediction": prediction}
+#     model_api_url = "http://karma_model:8081/predict"
+#     response = requests.post(model_api_url, json=item.dict())
+#     if response.status_code != 200:
+#         return {"error": f"Failed to get prediction from model API: {response.text}"}
+#     prediction = response.json()
+#     return {"prediction": prediction}
 
 
 @server.post("/products/predict", tags=['predict'])
@@ -426,7 +473,8 @@ async def predict(description: str = Form(...), image: UploadFile = File(...), a
         -H  "accept: application/json" 
         -H  "Content-Type: application/json" 
         -H "Authorization: Bearer JWT_TOKEN_VALUE" 
-        -d '{"description":"PRODUCT_DESCRIPTION","image_link":"IMAGE_LINK"}'
+        -F "description=DESCRIPTION"
+        -F "image=@/path/to/image.jpg"
 
     Output example
     --------------
@@ -434,7 +482,7 @@ async def predict(description: str = Form(...), image: UploadFile = File(...), a
     """
 
     if not description:
-        raise HTTPException(status_code=400, detail="Invalid input")
+        raise HTTPException(status_code=400, detail="Description is mandatory")
     
     if image:
         image_contents = await image.read()
@@ -474,8 +522,8 @@ async def predict(description: str = Form(...), image: UploadFile = File(...), a
 #     {"prediction":1234}
 #     """
 #     # L'image n'est pas obligatoire, à revoir le moment venu !!!!
-#     if not item.description or not item.image_link:
-#         raise HTTPException(status_code=400, detail="Invalid input")
+#     if not item.description:
+#         raise HTTPException(status_code=400, detail="Description is mandatory")
 
 #     model_api_url = "http://karma_model:8081/predict"
 #     response = requests.post(model_api_url, json=item.dict())
