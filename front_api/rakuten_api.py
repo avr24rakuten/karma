@@ -185,37 +185,40 @@ async def create_user(user: InputUser, admin: User = Depends(get_admin)):
         -H "Authorization: Bearer JWT_TOKEN_VALUE" 
         -d "{\"user\":\"USER\",\"password\":\"BASE64_PASSWORD\",\"roles\":{\"admin\":TRUE/FALSE,\"steward\":TRUE/FALSE,\"reader\":TRUE/FALSE}}"
     """
-    if len(user.roles) == 0:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="One privilege at least is required for user creation"
-        )
-    elif not user.password :
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Password is mandatory"
-        )
-    else:
-        hashed_password = hash_password(decode_base64(user.password))
-        engine = get_engine()
-        with engine.connect() as connection:
-            sql = "INSERT INTO users (user, hashed_password, "
-            sql += ", ".join([f"{role}" for role, status in user.roles.items()])
-            sql += ") VALUES (:user, :hashed_password, "
-            sql += ", ".join([f"{'true' if status else 'false'}" for role, status in user.roles.items()])
-            sql += f")"
-            statement = text(sql)
-            try:
-                connection.execute(statement,{"user": user.user, "hashed_password": hashed_password})
-                # Default rollback behavior with alchemy, so commit change !!!!
-                connection.commit()
-            except ValueError:
-                connection.rollback()
-                raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail="Erreur SQL"
-                )
-        return {"detail": "User successfully created"}
+    try:
+        if user.roles is None or len(user.roles) == 0:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="One privilege at least is required for user creation"
+            )
+        elif not user.password or user.password is None:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Password is mandatory"
+            )
+        else:
+            hashed_password = hash_password(decode_base64(user.password))
+            engine = get_engine()
+            with engine.connect() as connection:
+                sql = "INSERT INTO users (user, hashed_password, "
+                sql += ", ".join([f"{role}" for role, status in user.roles.items()])
+                sql += ") VALUES (:user, :hashed_password, "
+                sql += ", ".join([f"{'true' if status else 'false'}" for role, status in user.roles.items()])
+                sql += f")"
+                statement = text(sql)
+                try:
+                    connection.execute(statement,{"user": user.user, "hashed_password": hashed_password})
+                    # Default rollback behavior with alchemy, so commit change !!!!
+                    connection.commit()
+                except ValueError:
+                    connection.rollback()
+                    raise HTTPException(
+                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                    detail="Erreur SQL"
+                    )
+            return {"detail": "User successfully created"}
+    except Exception as e:
+        add_log('/shared/log.txt', str(e))
 
 @server.post("/users/reader", tags=['users'])
 async def create_user_reader(user: InputUser):
@@ -235,7 +238,7 @@ async def create_user_reader(user: InputUser):
         -H "Authorization: Bearer JWT_TOKEN_VALUE" 
         -d "{\"user\":\"USER\",\"password\":\"BASE64_PASSWORD\"}"
     """
-    if not user.password :
+    if not user.password or user.password is None:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Password is mandatory"
@@ -277,7 +280,7 @@ async def update_user(user: InputUser, admin: User = Depends(get_admin)):
         -d "{\"user\":\"USER\",\"password\":\"BASE64_PASSWORD\",\"roles\":{\"admin\":TRUE/FALSE,\"steward\":TRUE/FALSE,\"reader\":TRUE/FALSE}}"
     """
 
-    if len(user.roles) == 0:
+    if user.roles is None or len(user.roles) == 0:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="One role at least is required for user update"
@@ -319,7 +322,7 @@ async def update_user_password(user: InputUser, admin: User = Depends(get_admin)
         -d "{\"user\":\"USER\",\"password\":\"BASE64_PASSWORD\",\"roles\":{\"admin\":TRUE/FALSE,\"steward\":TRUE/FALSE,\"reader\":TRUE/FALSE}}"
     """
 
-    if not user.password:
+    if not user.password or user.password is None:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Password is null or empty"

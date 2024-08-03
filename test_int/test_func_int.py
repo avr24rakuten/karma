@@ -16,7 +16,7 @@ try:
     token_admin = get_admin_token(host_ip)
     token_reader = get_reader_token(host_ip)
 except:
-    print("Not Admin Token acquired") 
+    print("Not Token acquired") 
     sys.exit(1)
 
 #############################################
@@ -177,6 +177,7 @@ def test_create_user_no_privilege():
     data = {
         "user": "test",
         "password": "dGVzdA==",
+        "roles": { }
     }
     response = requests.post(url, headers=headers, data=json.dumps(data))
     assert response.status_code == 400
@@ -235,7 +236,7 @@ def test_create_user_reader_ok():
     assert check_response.status_code == 200
 
 def test_create_user_reader_no_password():
-    url = "http://{}:8000/users".format(host_ip)
+    url = "http://{}:8000/users/reader".format(host_ip)
     headers = {
         "accept": "application/json",
         "Content-Type": "application/json"
