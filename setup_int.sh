@@ -131,4 +131,4 @@ done
 # LAUNCH DOCKER COMPOSE
 echo "...:: Docker compose start..."
 pwd
-docker-compose -f docker/docker-compose-karma-int.yml up -d
+docker compose -f docker/docker-compose-karma-int.yml up -d
