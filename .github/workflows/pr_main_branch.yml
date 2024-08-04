@@ -31,6 +31,9 @@ jobs:
       - name: Unit Tests Step (Pytest)
         run: docker exec karma_api bash -c "python3 -m pytest test_rakuten_api.py"
 
+      - name: List files recursively
+        run: ls -lR
+
       - name: Run Bash Setup Test Integration Script
         env:
           MYSQL_ROOT_PASSWORD_INT: ${{ secrets.MYSQL_ROOT_PASSWORD_INT }}
@@ -42,7 +45,6 @@ jobs:
 
       - name: Container API Test Stop
         run: |
-            docker container rm karma_test_int || true
             docker container rm karma_test_int || true
             docker image rm karma_test_int || true
 
