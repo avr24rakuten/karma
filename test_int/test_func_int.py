@@ -95,17 +95,28 @@ def test_get_login_ko_wrongpassword():
 # PREDICT WITH FORM AND INPUTFILE INPUT
 def test_products_predict_ok():
 
+#     url = "http://{}:8000/products/predict".format(host_ip)
+#     headers = {
+#         "accept": "application/json",
+#         "Content-Type": "application/json",
+#         "Authorization": "Bearer {}".format(token_reader),
+#     }
+#     data = {
+#     "description": ("", "Olivia: Personalisiertes Notizbuch / 150 Seiten / Punktraster / Ca Din A5 / Rosen-Design"),
+#     "image": open("image_1263597046_product_3804725264.jpg", "rb")
+# }
+
     url = "http://{}:8000/products/predict".format(host_ip)
     headers = {
         "accept": "application/json",
-        "Content-Type": "application/json",
+        "Content-Type": "multipart/form-data",
         "Authorization": "Bearer {}".format(token_reader),
     }
-    data = {
-    "description": ("", "Olivia: Personalisiertes Notizbuch / 150 Seiten / Punktraster / Ca Din A5 / Rosen-Design"),
-    "image": open("image_1263597046_product_3804725264.jpg", "rb")
-}
-    response = requests.post(url, headers=headers, files=data)
+    files = {
+        "description": ("Olivia: Personalisiertes Notizbuch / 150 Seiten / Punktraster / Ca Din A5 / Rosen-Design"),
+        "image": ("image_1263597046_product_3804725264.jpg", open("image_1263597046_product_3804725264.jpg", "rb"))
+    }
+    response = requests.post(url, headers=headers, files=files)
 
 
     # CREATE ASSERT
@@ -159,7 +170,7 @@ def test_create_user_bad_encoded_password():
     headers = {
         "accept": "application/json",
         "Content-Type": "application/json",
-        "Authorization": "Bearer {}".format(token_reader),
+        "Authorization": "Bearer {}".format(token_admin),
     }
     data = {
         "user": "test",
