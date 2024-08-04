@@ -185,6 +185,7 @@ async def create_user(user: InputUser, admin: User = Depends(get_admin)):
         -H "Authorization: Bearer JWT_TOKEN_VALUE" 
         -d "{\"user\":\"USER\",\"password\":\"BASE64_PASSWORD\",\"roles\":{\"admin\":TRUE/FALSE,\"steward\":TRUE/FALSE,\"reader\":TRUE/FALSE}}"
     """
+    add_log('/shared/log.txt', "call POST users")
     try:
         if user.roles is None or len(user.roles) == 0:
             raise HTTPException(
