@@ -1,4 +1,2 @@
 call POST users
-400: Password is mandatory
-call POST users
-400: One privilege at least is required for user creation
+400: String is not properly base64 & utf-8 encoded

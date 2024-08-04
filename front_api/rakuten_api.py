@@ -490,7 +490,7 @@ async def predict(description: str = Form(...), image: UploadFile = File(...), a
     
     if image:
         image_contents = await image.read()
-        image_path = os.path.join("shared/buffer/image", image.filename)
+        image_path = os.path.join("./shared/buffer/image", image.filename)
         with open(image_path, "wb") as f:
                 f.write(image_contents)
 

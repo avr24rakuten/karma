@@ -103,7 +103,7 @@ def test_products_predict_ok():
     }
     data = {
     "description": ("", "Olivia: Personalisiertes Notizbuch / 150 Seiten / Punktraster / Ca Din A5 / Rosen-Design"),
-    "image": open("/home/hymnuade/karma/shared/image_1263597046_product_3804725264.jpg", "rb")
+    "image": open("image_1263597046_product_3804725264.jpg", "rb")
 }
     response = requests.post(url, headers=headers, files=data)
 
