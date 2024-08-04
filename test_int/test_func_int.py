@@ -109,12 +109,11 @@ def test_products_predict_ok():
     url = "http://{}:8000/products/predict".format(host_ip)
     headers = {
         "accept": "application/json",
-        "Content-Type": "multipart/form-data",
         "Authorization": "Bearer {}".format(token_reader),
     }
     files = {
-        "description": ("Olivia: Personalisiertes Notizbuch / 150 Seiten / Punktraster / Ca Din A5 / Rosen-Design"),
-        "image": ("image_1263597046_product_3804725264.jpg", open("image_1263597046_product_3804725264.jpg", "rb"))
+        "description": (None, "Olivia: Personalisiertes Notizbuch / 150 Seiten / Punktraster / Ca Din A5 / Rosen-Design"),
+        "image": ("image_1263597046_product_3804725264.jpg", open("image_1263597046_product_3804725264.jpg", "rb"), "image/jpeg")
     }
     response = requests.post(url, headers=headers, files=files)
 
