@@ -146,6 +146,25 @@ def test_create_user_ok():
     # LOGIN CALL ASSERT
     assert check_response.status_code == 200
 
+def test_create_user_bad_encoded_password():
+    url = "http://{}:8000/users".format(host_ip)
+    headers = {
+        "accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer {}".format(token_reader),
+    }
+    data = {
+        "user": "test",
+        "password": "admin",
+        "roles": {
+            "admin": False,
+            "steward": False,
+            "reader": False
+        }
+    }
+    response = requests.post(url, headers=headers, data=json.dumps(data))
+    assert response.status_code == 400
+    assert response.json() == {"detail":"String is not properly base64 & utf-8 encoded"}
 
 def test_create_user_not_ok():
     url = "http://{}:8000/users".format(host_ip)
@@ -192,6 +211,7 @@ def test_create_user_no_password():
     }
     data = {
         "user": "test",
+        "password": "",
         "roles": {
             "admin": False,
             "steward": False,
@@ -214,7 +234,8 @@ def test_create_user_reader_ok():
     }
     data = {
         "user": "{}".format(user),
-        "password": "{}".format(password)
+        "password": "{}".format(password),
+        "roles": {}
     }
     response = requests.post(url, headers=headers, data=json.dumps(data))
 
@@ -225,7 +246,8 @@ def test_create_user_reader_ok():
     }
     check_data = {
         "username": user,
-        "password": password
+        "password": password,
+        "roles": {}
     }
     check_response = requests.post(check_url, headers=check_headers, data=json.dumps(check_data))
 
@@ -242,7 +264,9 @@ def test_create_user_reader_no_password():
         "Content-Type": "application/json"
     }
     data = {
-        "user": "test_reader"
+        "user": "test_reader",
+        "password": "",
+        "roles": {}
         }
     response = requests.post(url, headers=headers, data=json.dumps(data))
     assert response.status_code == 400
@@ -258,6 +282,7 @@ def test_update_user_ok():
     }
     data = {
         "user": "test",
+        "password": "",
         "roles": {
             "admin": False,
             "steward": False,
@@ -277,6 +302,7 @@ def test_update_user_not_ok():
     }
     data = {
         "user": "test",
+        "password": "",
         "roles": {
             "admin": False,
             "steward": False,
