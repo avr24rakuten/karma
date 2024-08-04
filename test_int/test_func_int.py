@@ -6,6 +6,15 @@ import requests
 
 from lib.utils import *
 
+##########################################################
+# VARIABLES
+##########################################################
+
+user_test_reader = 'test_reader'
+password_test_reader = 'dGVzdF9yZWFkZXI='
+user_test = 'test'
+password_test = 'dGVzdA=='
+
 try:
     host_ip = os.environ.get('HOST_IP')
 except:
@@ -110,8 +119,7 @@ def test_products_predict_ok():
 
 # CREATE USER
 def test_create_user_ok():
-    user = 'test'
-    password = 'dGVzdA=='
+
     url = "http://{}:8000/users".format(host_ip)
     headers = {
         "accept": "application/json",
@@ -119,8 +127,8 @@ def test_create_user_ok():
         "Authorization": "Bearer {}".format(token_admin),
     }
     data = {
-        "user": user,
-        "password": password,
+        "user": user_test,
+        "password": password_test,
         "roles": {
             "admin": False,
             "steward": False,
@@ -135,8 +143,8 @@ def test_create_user_ok():
         "Content-Type": "application/json",
     }
     check_data = {
-        "username": user,
-        "password": password,
+        "username": user_test,
+        "password": password_test,
     }
     check_response = requests.post(check_url, headers=check_headers, data=json.dumps(check_data))
 
@@ -225,16 +233,14 @@ def test_create_user_no_password():
 # CREATE USER READER BY DEFAULT
 
 def test_create_user_reader_ok():
-    user = 'test_reader'
-    password = 'dGVzdF9yZWFkZXI='
     url = "http://{}:8000/users/reader".format(host_ip)
     headers = {
         "accept": "application/json",
         "Content-Type": "application/json",
     }
     data = {
-        "user": "{}".format(user),
-        "password": "{}".format(password),
+        "user": "{}".format(user_test_reader),
+        "password": "{}".format(password_test_reader),
         "roles": {}
     }
     response = requests.post(url, headers=headers, data=json.dumps(data))
@@ -245,8 +251,8 @@ def test_create_user_reader_ok():
         "Content-Type": "application/json",
     }
     check_data = {
-        "username": user,
-        "password": password,
+        "username": user_test_reader,
+        "password": password_test_reader,
         "roles": {}
     }
     check_response = requests.post(check_url, headers=check_headers, data=json.dumps(check_data))
@@ -289,7 +295,7 @@ def test_update_user_ok():
             "reader": True
         }
     }
-    response = requests.post(url, headers=headers, data=json.dumps(data))
+    response = requests.put(url, headers=headers, data=json.dumps(data))
     assert response.status_code == 200
     assert response.json() == {"detail":"User successfully updated"}
 
@@ -309,7 +315,7 @@ def test_update_user_not_ok():
             "reader": False
         }
     }
-    response = requests.post(url, headers=headers, data=json.dumps(data))
+    response = requests.put(url, headers=headers, data=json.dumps(data))
     assert response.status_code == 403
     assert response.json() == {"detail":"Insufficient role"}
 
@@ -322,8 +328,10 @@ def test_update_user_bad_data():
     }
     data = {
         "user": "test",
+        "password": "",
+        "roles": {}
     }
-    response = requests.post(url, headers=headers, data=json.dumps(data))
+    response = requests.put(url, headers=headers, data=json.dumps(data))
     assert response.status_code == 400
     assert response.json() == {"detail":"One role at least is required for user update"}
 
