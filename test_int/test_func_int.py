@@ -177,7 +177,7 @@ def test_create_user_no_privilege():
     data = {
         "user": "test",
         "password": "dGVzdA==",
-        "roles": { }
+        "roles": {}
     }
     response = requests.post(url, headers=headers, data=json.dumps(data))
     assert response.status_code == 400
