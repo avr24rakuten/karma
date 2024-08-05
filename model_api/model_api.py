@@ -44,8 +44,8 @@ async def get_status():
 
 @server.post("/predict")
 async def predict(inputProduct: InputProduct):
-    try:
-        prediction = predictor.predict(inputProduct.description, inputProduct.image_link)
-        return {prediction}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    # try:
+    prediction = predictor.predict(inputProduct.description, inputProduct.image_link)
+    return {prediction}
+    # except Exception as e:
+    #     raise HTTPException(status_code=500, detail=str(e))
