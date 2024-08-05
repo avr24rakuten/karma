@@ -134,19 +134,17 @@ def test_products_predict_ok():
     # Vérifier si l'image existe
     assert os.path.exists(image_path), "L'image n'existe pas à l'emplacement spécifié."
 
-    files = {
-        "description": (None, "Olivia: Personalisiertes Notizbuch / 150 Seiten / Punktraster / Ca Din A5 / Rosen-Design"),
-        "image": (os.path.basename(image_path), open(image_path, "rb"), "image/jpeg")
-    }
-    
-    response = requests.post(url, headers=headers, files=files)
-    
-    # Afficher le contenu de la réponse pour le débogage
+    with open(image_path, "rb") as image_file:
+        files = {
+            "description": (None, "Olivia: Personalisiertes Notizbuch / 150 Seiten / Punktraster / Ca Din A5 / Rosen-Design"),
+            "image": (image_path, image_file, "image/jpeg")
+        }
+        response = requests.post(url, headers=headers, files=files)
+
     print(response.content)
     
     assert response.status_code == 200, f"Expected status code 200 but got {response.status_code}"
     assert response.json()['prediction'][0] == 1234, "La prédiction ne correspond pas à la valeur attendue."
-
 
 
 
@@ -190,6 +188,30 @@ def test_create_user_ok():
     assert response.json() == {"detail":"User successfully created"}
     # LOGIN CALL ASSERT
     assert check_response.status_code == 200
+
+def test_create_user_already_exist_ko():
+
+    url = "http://{}:8000/users".format(host_ip)
+    headers = {
+        "accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer {}".format(token_admin),
+    }
+    data = {
+        "user": user_test,
+        "password": password_test,
+        "roles": {
+            "admin": False,
+            "steward": False,
+            "reader": False
+        }
+    }
+    response = requests.post(url, headers=headers, data=json.dumps(data))
+
+    # CREATE ASSERT
+    assert response.status_code == 400
+    assert response.json() == {"detail":"User already exists"}
+
 
 def test_create_user_bad_encoded_password():
     url = "http://{}:8000/users".format(host_ip)

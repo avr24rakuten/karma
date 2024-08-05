@@ -185,8 +185,6 @@ async def create_user(user: InputUser, admin: User = Depends(get_admin)):
         -H "Authorization: Bearer JWT_TOKEN_VALUE" 
         -d "{\"user\":\"USER\",\"password\":\"BASE64_PASSWORD\",\"roles\":{\"admin\":TRUE/FALSE,\"steward\":TRUE/FALSE,\"reader\":TRUE/FALSE}}"
     """
-    # add_log('./shared/log.txt', "call POST users")
-    # try:
     if user.roles is None or len(user.roles) == 0:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -196,6 +194,11 @@ async def create_user(user: InputUser, admin: User = Depends(get_admin)):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Password is mandatory"
+        )
+    elif check_user_exist:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="User already exists"
         )
     else:
         hashed_password = hash_password(decode_base64(user.password))
@@ -218,8 +221,6 @@ async def create_user(user: InputUser, admin: User = Depends(get_admin)):
                 detail="Erreur SQL"
                 )
         return {"detail": "User successfully created"}
-    # except Exception as e:
-    #     add_log('./shared/log.txt', str(e))
 
 @server.post("/users/reader", tags=['users'])
 async def create_user_reader(user: InputUser):
@@ -484,7 +485,6 @@ async def predict(description: str = Form(...), image: UploadFile = File(...), a
     --------------
     {"prediction":1234}
     """
-
     if not description:
         raise HTTPException(status_code=400, detail="Description is mandatory")
     

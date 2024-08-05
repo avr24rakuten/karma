@@ -33,6 +33,18 @@ SECRET_JWT_KEY = os.environ['SECRET_JWT_KEY']
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="users/login")
 
+def check_user_exist(user: str):
+    engine = get_engine()
+    with engine.connect() as connection:
+        statement = text('SELECT * FROM users WHERE users.user = '':user'' LIMIT 1')
+        results = connection.execute(statement,{"user": user})
+
+    result = results.fetchone()
+    if result is None:
+        return False
+    else:
+        return True
+
 def get_user(user: str):
     engine = get_engine()
     with engine.connect() as connection:
@@ -51,7 +63,6 @@ def get_user(user: str):
         )
     else:
         user = None
-
     return user
 
 def authenticate_user(username: str, password: str):
