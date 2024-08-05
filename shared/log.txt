@@ -1,0 +1,15 @@
+CALL CREATE USER
+test
+False
+CALL CREATE USER
+admin
+True
+CALL CREATE USER
+user_bad_encoded_password
+False
+CALL CREATE USER
+test
+True
+CALL CREATE USER
+test
+True

@@ -37,9 +37,6 @@ jobs:
           HOST_IP: ${{ env.HOST_IP }}
         run: ./setup_test_int.sh
 
-      - name: List files recursively
-        run: docker exec karma_test_int bash -c "ls -lR"
-
       - name: API Tests Step (Pytest)
         run: docker exec karma_test_int bash -c "python3 -m pytest test_func_int.py"
 

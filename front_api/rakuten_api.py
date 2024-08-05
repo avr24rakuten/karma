@@ -195,7 +195,7 @@ async def create_user(user: InputUser, admin: User = Depends(get_admin)):
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Password is mandatory"
         )
-    elif check_user_exist:
+    elif check_user_exist(user.user):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="User already exists"
@@ -244,6 +244,11 @@ async def create_user_reader(user: InputUser):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Password is mandatory"
+        )
+    elif check_user_exist(user.user):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="User already exists"
         )
     else:
         hashed_password = hash_password(decode_base64(user.password))

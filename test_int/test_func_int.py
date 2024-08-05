@@ -13,6 +13,7 @@ from lib.utils import *
 user_test_reader = 'test_reader'
 password_test_reader = 'dGVzdF9yZWFkZXI='
 user_test = 'test'
+user_test_comp = 'test_comp'
 password_test = 'dGVzdA=='
 
 try:
@@ -131,7 +132,7 @@ def test_products_predict_ok():
     }
     image_path = "image_1263597046_product_3804725264.jpg"
     
-    # Vérifier si l'image existe
+    # Check if image exist / Local version
     assert os.path.exists(image_path), "L'image n'existe pas à l'emplacement spécifié."
 
     with open(image_path, "rb") as image_file:
@@ -141,8 +142,6 @@ def test_products_predict_ok():
         }
         response = requests.post(url, headers=headers, files=files)
 
-    print(response.content)
-    
     assert response.status_code == 200, f"Expected status code 200 but got {response.status_code}"
     assert response.json()['prediction'][0] == 1234, "La prédiction ne correspond pas à la valeur attendue."
 
@@ -162,12 +161,12 @@ def test_create_user_ok():
         "Authorization": "Bearer {}".format(token_admin),
     }
     data = {
-        "user": user_test,
-        "password": password_test,
+        "user": "{}".format(user_test),
+        "password": "{}".format(password_test),
         "roles": {
             "admin": False,
             "steward": False,
-            "reader": False
+            "reader": True
         }
     }
     response = requests.post(url, headers=headers, data=json.dumps(data))
@@ -198,12 +197,12 @@ def test_create_user_already_exist_ko():
         "Authorization": "Bearer {}".format(token_admin),
     }
     data = {
-        "user": user_test,
+        "user": "admin",
         "password": password_test,
         "roles": {
             "admin": False,
             "steward": False,
-            "reader": False
+            "reader": True
         }
     }
     response = requests.post(url, headers=headers, data=json.dumps(data))
@@ -211,7 +210,6 @@ def test_create_user_already_exist_ko():
     # CREATE ASSERT
     assert response.status_code == 400
     assert response.json() == {"detail":"User already exists"}
-
 
 def test_create_user_bad_encoded_password():
     url = "http://{}:8000/users".format(host_ip)
@@ -221,12 +219,12 @@ def test_create_user_bad_encoded_password():
         "Authorization": "Bearer {}".format(token_admin),
     }
     data = {
-        "user": "test",
+        "user": "testbadpassword",
         "password": "admin",
         "roles": {
             "admin": False,
             "steward": False,
-            "reader": False
+            "reader": True
         }
     }
     response = requests.post(url, headers=headers, data=json.dumps(data))
@@ -241,7 +239,7 @@ def test_create_user_not_ok():
         "Authorization": "Bearer {}".format(token_reader),
     }
     data = {
-        "user": "test",
+        "user": "testnotrole",
         "password": "dGVzdA==",
         "roles": {
             "admin": False,
@@ -261,7 +259,7 @@ def test_create_user_no_privilege():
         "Authorization": "Bearer {}".format(token_admin),
     }
     data = {
-        "user": "test",
+        "user": "testnoprivilege",
         "password": "dGVzdA==",
         "roles": {}
     }
