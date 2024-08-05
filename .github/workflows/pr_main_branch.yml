@@ -32,7 +32,7 @@ jobs:
         run: docker exec karma_api bash -c "python3 -m pytest test_rakuten_api.py"
 
       - name: List files recursively
-        run: ls -lR
+        run: docker exec karma_api bash -c "ls -lR"
 
       - name: Run Bash Setup Test Integration Script
         env:
