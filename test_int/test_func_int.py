@@ -93,34 +93,61 @@ def test_get_login_ko_wrongpassword():
 #############################################
 
 # PREDICT WITH FORM AND INPUTFILE INPUT
-def test_products_predict_ok():
+# def test_products_predict_ok():
+
+# #     url = "http://{}:8000/products/predict".format(host_ip)
+# #     headers = {
+# #         "accept": "application/json",
+# #         "Content-Type": "application/json",
+# #         "Authorization": "Bearer {}".format(token_reader),
+# #     }
+# #     data = {
+# #     "description": ("", "Olivia: Personalisiertes Notizbuch / 150 Seiten / Punktraster / Ca Din A5 / Rosen-Design"),
+# #     "image": open("image_1263597046_product_3804725264.jpg", "rb")
+# # }
 
 #     url = "http://{}:8000/products/predict".format(host_ip)
 #     headers = {
 #         "accept": "application/json",
-#         "Content-Type": "application/json",
 #         "Authorization": "Bearer {}".format(token_reader),
 #     }
-#     data = {
-#     "description": ("", "Olivia: Personalisiertes Notizbuch / 150 Seiten / Punktraster / Ca Din A5 / Rosen-Design"),
-#     "image": open("image_1263597046_product_3804725264.jpg", "rb")
-# }
+#     files = {
+#         "description": (None, "Olivia: Personalisiertes Notizbuch / 150 Seiten / Punktraster / Ca Din A5 / Rosen-Design"),
+#         "image": ("image_1263597046_product_3804725264.jpg", open("image_1263597046_product_3804725264.jpg", "rb"), "image/jpeg")
+#     }
+#     response = requests.post(url, headers=headers, files=files)
 
+
+#     # CREATE ASSERT
+#     assert response.status_code == 200
+#     assert response['prediction'][0] == 1234
+
+
+def test_products_predict_ok():
     url = "http://{}:8000/products/predict".format(host_ip)
     headers = {
         "accept": "application/json",
         "Authorization": "Bearer {}".format(token_reader),
     }
+    image_path = "image_1263597046_product_3804725264.jpg"
+    
+    # Vérifier si l'image existe
+    assert os.path.exists(image_path), "L'image n'existe pas à l'emplacement spécifié."
+
     files = {
         "description": (None, "Olivia: Personalisiertes Notizbuch / 150 Seiten / Punktraster / Ca Din A5 / Rosen-Design"),
-        "image": ("image_1263597046_product_3804725264.jpg", open("image_1263597046_product_3804725264.jpg", "rb"), "image/jpeg")
+        "image": (os.path.basename(image_path), open(image_path, "rb"), "image/jpeg")
     }
+    
     response = requests.post(url, headers=headers, files=files)
+    
+    # Afficher le contenu de la réponse pour le débogage
+    print(response.content)
+    
+    assert response.status_code == 200, f"Expected status code 200 but got {response.status_code}"
+    assert response.json()['prediction'][0] == 1234, "La prédiction ne correspond pas à la valeur attendue."
 
 
-    # CREATE ASSERT
-    assert response.status_code == 200
-    assert response['prediction'][0] == 1234
 
 
 #############################################
