@@ -46,4 +46,4 @@ jobs:
             docker image rm karma_test_int || true
 
       - name: Docker Compose Down
-        run: docker-compose -f docker/docker-compose-karma-int.yml down
+        run: docker compose -f docker/docker-compose-karma-int.yml down
