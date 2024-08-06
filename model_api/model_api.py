@@ -1,10 +1,11 @@
-from fastapi import FastAPI, HTTPException, UploadFile, File #, status
+from fastapi import FastAPI, HTTPException, status, UploadFile, File #, status
 # from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 # from sqlalchemy import text
 # from typing_extensions import Annotated
 from pydantic import BaseModel
 from tensorflow import keras
 import json
+import os
 
 from lib.model import *
 from shared.lib.shared_class import *
@@ -44,8 +45,13 @@ async def get_status():
 
 @server.post("/predict")
 async def predict(inputProduct: InputProduct):
-    try:
+    # try:
+    if os.path.exists(inputProduct.image_link):
         prediction = predictor.predict(inputProduct.description, inputProduct.image_link)
+        os.remove(inputProduct.image_link)
         return {prediction}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_500_BAD_REQUEST,
+            detail="Internal error, file do not exist"
+        )

@@ -27,6 +27,21 @@ def test_create_access_token():
     # Check if Token expire in ACCESS_TOKEN_EXPIRE_MINUTES
     assert datetime.fromtimestamp(decoded_token["exp"], timezone.utc) - datetime.now(timezone.utc) <= timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
 
+def test_create_access_token_tokenformat():
+    data = {"sub": "admin"}
+    token = create_access_token(data)
+
+    sections = token.split('.')
+    sections_qty = len(sections)
+    sections_empty = 0
+
+    for i, section in enumerate(sections):
+        if len(section) == 0:
+            sections_empty += 1
+    
+    assert sections_qty == 3
+    assert sections_empty == 0
+
 def test_create_access_token_invalid_type():
     # Non-dict parameter test
     with pytest.raises(AttributeError):

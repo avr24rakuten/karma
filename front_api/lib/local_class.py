@@ -3,8 +3,8 @@ from typing import Union, Dict, Optional
 
 class InputUser(BaseModel):
     user: str
-    password: str
-    roles: Dict[str, bool]
+    password: Optional[str]
+    roles: Optional[Dict[str, bool]]
 
 class LoginUser(BaseModel):
     username: str

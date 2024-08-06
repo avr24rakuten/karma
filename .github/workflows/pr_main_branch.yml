@@ -43,8 +43,7 @@ jobs:
       - name: Container API Test Stop
         run: |
             docker container rm karma_test_int || true
-            docker container rm karma_test_int || true
             docker image rm karma_test_int || true
 
       - name: Docker Compose Down
-        run: docker-compose -f docker/docker-compose-karma-int.yml down
+        run: docker compose -f docker/docker-compose-karma-int.yml down
