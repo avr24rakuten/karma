@@ -38,6 +38,9 @@ jobs:
         run: ./setup_test_int.sh
 
       - name: API Tests Step (Pytest)
+        run: docker exec karma_test_int bash -c "python3 test.py"
+
+      - name: API Tests Step (Pytest)
         run: docker exec karma_test_int bash -c "python3 -m pytest test_func_int.py"
 
       - name: Container API Test Stop

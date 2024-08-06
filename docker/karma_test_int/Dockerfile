@@ -7,6 +7,7 @@ ENV HOST_IP=$HOST_IP
 
 COPY docker/karma_test_int/requirements.txt ./
 COPY test_int ./app/
+COPY test/test.py ./
 
 RUN apt update && pip install -r requirements.txt
 
