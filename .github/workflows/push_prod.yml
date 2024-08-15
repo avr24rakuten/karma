@@ -33,7 +33,11 @@ jobs:
             run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/karma_model:${{ github.event.release.tag_name }}
 
           - name: Notify Deployment
-            run: curl -X POST http://34.163.247.29/deploy -H "Content-Type: application/json" -d "{\"version\": \"${{ github.event.release.tag_name }}\"}"
+            run: |
+              curl -X POST http://34.163.247.29/deploy \
+              -H "Content-Type: application/json" \
+              -d "{\"version\": \"${{ github.event.release.tag_name }}\"}"
+          
 
           # - name: Copy docker-compose file and shared, create network and volume and start services
           #   uses: appleboy/ssh-action@master
