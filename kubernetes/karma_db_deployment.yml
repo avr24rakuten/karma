@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: karma_db
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: karma_db
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: karma_db
+    spec:
+      containers:
+      - name: karma_db
+        image: avr24rakuten/karma_db:latest
+        volumeMounts:
+        - mountPath: /karma/shared
+          name: shared_volume
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: PROD_SECRET
+              key: MYSQL_ROOT_PASSWORD_PROD
+      volumes:
+      - name: shared_volume
+        persistentVolumeClaim:
+          claimName: karma_shared_pvc

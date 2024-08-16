@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: karma_model
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: karma_model
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: karma_model
+    spec:
+      containers:
+      - name: karma_model
+        image: avr24rakuten/karma_model:latest
+        volumeMounts:
+        - mountPath: /karma/shared
+          name: shared_volume
+      volumes:
+      - name: shared_volume
+        persistentVolumeClaim:
+          claimName: karma_shared_pvc

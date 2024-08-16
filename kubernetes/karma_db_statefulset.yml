@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: karma_db
+spec:
+  serviceName: "karma_db"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: karma_db
+  template:
+    metadata:
+      labels:
+        app: karma_db
+    spec:
+      containers:
+      - name: karma_db
+        image: avr24rakuten/karma_db:latest
+        volumeMounts:
+        - mountPath: /karma/shared
+          name: shared_volume
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: PROD_SECRET
+              key: MYSQL_ROOT_PASSWORD_PROD
+  volumeClaimTemplates:
+  - metadata:
+      name: shared_volume
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi

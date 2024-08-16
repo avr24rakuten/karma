@@ -1,10 +1,5 @@
 # Official Mysql image
-FROM mysql:latest
+FROM avr24rakuten/karma_db:latest
 
-# ADD ARGUMENT FOR DOCKER IMAGE BUILD THEN CREATE ENV VARIABLE AVAILABLE FOR KARMA
 ARG MYSQL_ROOT_PASSWORD
 ENV MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
-
-# SQL init script
-COPY docker/karma_db/init_common.sql /docker-entrypoint-initdb.d/
-COPY docker/karma_db/init_prod.sql /docker-entrypoint-initdb.d/
