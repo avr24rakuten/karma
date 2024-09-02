@@ -37,13 +37,13 @@ else
 fi
 
 # DOCKER COMPOSE PREREQUISITES
-echo "...:: Contrôle de Docker Compose"
-if [ -x "$(docker-compose --version)" ]; then
-    echo "Docker Compose installed ..."
-else
-    echo "Docker Compose not installed, follow instructions on : https://docs.docker.com/compose/install/"
-    exit 1
-fi
+# echo "...:: Contrôle de Docker Compose"
+# if [ -x "$(docker-compose --version)" ]; then
+#     echo "Docker Compose installed ..."
+# else
+#     echo "Docker Compose not installed, follow instructions on : https://docs.docker.com/compose/install/"
+#     exit 1
+# fi
 
 
 echo "...:: Containers status check and stop if needed"
