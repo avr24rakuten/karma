@@ -38,7 +38,7 @@ fi
 
 # DOCKER COMPOSE PREREQUISITES
 echo "...:: Contrôle de Docker Compose"
-if [ -x "$(command -v docker)" ]; then
+if [ -x "$(docker-compose --version)" ]; then
     echo "Docker Compose installed ..."
 else
     echo "Docker Compose not installed, follow instructions on : https://docs.docker.com/compose/install/"
@@ -130,5 +130,4 @@ done
 
 # LAUNCH DOCKER COMPOSE
 echo "...:: Docker compose start..."
-pwd
 docker compose -f docker/docker-compose-karma-int.yml up -d

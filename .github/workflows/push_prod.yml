@@ -37,19 +37,3 @@ jobs:
               curl -X POST http://34.163.247.29/deploy \
               -H "Content-Type: application/json" \
               -d "{\"version\": \"${{ github.event.release.tag_name }}\"}"
-          
-
-          # - name: Copy docker-compose file and shared, create network and volume and start services
-          #   uses: appleboy/ssh-action@master
-          #   with:
-          #     host: ${{ secrets.PROD_HOST_ARNO }}
-          #     username: ${{ secrets.PROD_USERNAME }}
-          #     key: ${{ secrets.PROD_SSH_KEY_ARNO }}
-          #     script: |
-          #       cp /docker/docker-compose-karma-prod.yml /app/docker-compose.yml
-          #       cp /shared /app
-          #       cd /app
-          #       docker create network karma_network
-          #       docker volume create --driver local --opt type=none --opt device=~/app/shared/ --opt o=bind karma_shared_volume
-          #       docker-compose pull
-          #       docker-compose up -d
