@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: karma_api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: karma_api
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: karma_api
+    spec:
+      containers:
+      - name: karma_api
+        image: avr24rakuten/karma_api:latest
+        ports:
+        - containerPort: 8000
+        volumeMounts:
+        - mountPath: /karma/shared
+          name: shared_volume
+        env:
+        - name: SECRET_JWT_KEY
+          valueFrom:
+            secretKeyRef:
+              name: PROD_SECRET
+              key: SECRET_JWT_KEY
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: PROD_SECRET
+              key: MYSQL_ROOT_PASSWORD_PROD
+      volumes:
+      - name: shared_volume
+        persistentVolumeClaim:
+          claimName: karma_shared_pvc

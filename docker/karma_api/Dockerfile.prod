@@ -1,20 +1,12 @@
 # Official ubuntu image
-FROM avr24rakuten/karma_base:latest
+FROM avr24rakuten/karma_api:latest
 
-# ADD ARGUMENT FOR DOCKER IMAGE BUILD THEN CREATE ENV VARIABLE AVAILABLE FOR KARMA
 ARG SECRET_JWT_KEY
 ENV SECRET_JWT_KEY=$SECRET_JWT_KEY
 
 ARG MYSQL_ROOT_PASSWORD
 ENV MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
 
-COPY docker/karma_api/requirements.txt ./
-COPY front_api ./app/
-
-RUN apt update && apt install -y libmysqlclient-dev curl && pip install -r requirements.txt
-
 EXPOSE 8000
-
 WORKDIR /app
-
 CMD uvicorn rakuten_api:server --host 0.0.0.0
