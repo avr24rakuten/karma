@@ -1,4 +1,4 @@
-# Official ubuntu image
+# Karma Base Image
 FROM avr24rakuten/karma_base:latest
 
 # ADD ARGUMENT FOR DOCKER IMAGE BUILD THEN CREATE ENV VARIABLE AVAILABLE FOR KARMA
