@@ -24,19 +24,13 @@ jobs:
             run: ./build_images_prod.sh
     
           - name: Push Docker image karma_api to Docker Hub
-            run: |
-              docker push ${{ secrets.DOCKERHUB_USERNAME }}/karma_api:latest
-              docker push ${{ secrets.DOCKERHUB_USERNAME }}/karma_api:${{ github.event.release.tag_name }}
+            run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/karma_api:${{ github.event.release.tag_name }}
               
           - name: Push Docker image karma_db to Docker Hub
-            run: |
-              docker push ${{ secrets.DOCKERHUB_USERNAME }}/karma_db:latest
-              docker push ${{ secrets.DOCKERHUB_USERNAME }}/karma_db:${{ github.event.release.tag_name }}
+            run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/karma_db:${{ github.event.release.tag_name }}
               
           - name: Push Docker image karma_model to Docker Hub
-            run: |
-              docker push ${{ secrets.DOCKERHUB_USERNAME }}/karma_model:latest
-              docker push ${{ secrets.DOCKERHUB_USERNAME }}/karma_model:${{ github.event.release.tag_name }}
+            run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/karma_model:${{ github.event.release.tag_name }}
               
           - name: Notify Deployment
             run: |

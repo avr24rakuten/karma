@@ -1,5 +1,13 @@
 #!/bin/bash
 
+### ### PARAMETERS
+if [ -z "$1" ]; then
+  echo "Missing : $0 <version>"
+  exit 1
+fi
+
+VERSION=$1
+
 ### ### V1 WITHOUT ROLL
 
 ### KARMA DB DUMP IN SHARED IF EXIST
@@ -92,6 +100,9 @@ for KARMA_IMAGE in "${KARMA_IMAGES[@]}"; do
 done
 
 echo "...:: Docker compose start..."
+
+sed "s/__VERSION__/$VERSION/g" docker/docker-compose-template.yml > docker/docker-compose-karma-prod.yml
+
 docker compose -f docker/docker-compose-karma-prod.yml up -d
 
 ### KARMA DB RESTORE IN SHARED IF EXIST
