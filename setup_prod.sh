@@ -101,7 +101,7 @@ done
 
 echo "...:: Docker compose start..."
 
-sed "s/__VERSION__/$VERSION/g" docker/docker-compose-template.yml > docker/docker-compose-karma-prod.yml
+sed "s/__VERSION__/$VERSION/g" docker/docker-compose-karma-prod-template.yml > docker/docker-compose-karma-prod.yml
 
 docker compose -f docker/docker-compose-karma-prod.yml up -d
 
