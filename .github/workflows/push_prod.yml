@@ -34,6 +34,6 @@ jobs:
               
           - name: Notify Deployment
             run: |
-              curl -X POST http://34.163.247.29/deploy \
+              curl -X POST http://34.163.247.29:8033/deploy \
               -H "Content-Type: application/json" \
               -d "{\"version\": \"${{ github.event.release.tag_name }}\"}"
