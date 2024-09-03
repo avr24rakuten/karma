@@ -71,6 +71,8 @@ for KARMA_IMAGE in "${KARMA_IMAGES[@]}"; do
         echo "RELEASE TAG PLACE"
         echo $TAG
         BUILD_CMD+=" -f docker/${KARMA_IMAGE}/Dockerfile.prod -t ${KARMA_IMAGE}:${TAG} ."
+        echo "LA COMMANDE"
+        echo $BUILD_CMD
         eval $BUILD_CMD || { echo "Image creation failed"; exit 1; }
 
     fi
