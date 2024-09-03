@@ -7,21 +7,21 @@ services:
     ports:
       - 8000:8000
     volumes:
-      - karma_shared_volume:/app/shared
+      - karma_shared_volume:/karma/shared
   karma_db:
     image: avr24rakuten/karma_db:latest
     container_name: karma_db
     networks:
       - karma_network
     volumes:
-      - karma_shared_volume:/app/shared
+      - karma_shared_volume:/karma/shared
   karma_model:
     image: avr24rakuten/karma_model:latest
     container_name: karma_model
     networks:
       - karma_network
     volumes:
-      - karma_shared_volume:/app/shared
+      - karma_shared_volume:/karma/shared
 networks:
   karma_network:
 volumes:
