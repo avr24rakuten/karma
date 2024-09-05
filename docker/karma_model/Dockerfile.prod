@@ -1,12 +1,3 @@
-# Karma Base Image
-FROM avr24rakuten/karma_model:latest
-
-EXPOSE 8081
-WORKDIR /app
-CMD uvicorn model_api:server --host 0.0.0.0 --port 8081
-
-
-
 # Official ubuntu image
 FROM avr24rakuten/karma_base:latest
 

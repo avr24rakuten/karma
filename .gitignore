@@ -3,3 +3,4 @@ model_api/models/best_lstm_model.h5
 /ignore/
 /test/
 /z_private/
+secret.env
