@@ -4,7 +4,8 @@ from tensorflow.keras.applications.vgg16 import preprocess_input
 from tensorflow.keras.preprocessing.image import img_to_array, load_img
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 import numpy as np
-
+import boto3
+import os
 
 
 class Predict:
@@ -53,3 +54,19 @@ class Predict:
         final_prediction = np.argmax(concatenate_proba, axis=1)
 
         return self.mapper[str(final_prediction[0])]
+    
+
+def download_from_s3_folder(bucket_name, s3_folder, local_folder):
+    s3 = boto3.resource('s3')
+    bucket = s3.Bucket(bucket_name)
+
+    # Créer le dossier local si nécessaire
+    os.makedirs(local_folder, exist_ok=True)
+
+    # Télécharger les fichiers
+    for obj in bucket.objects.filter(Prefix=s3_folder):
+        if not obj.key.endswith('/'): 
+            target = os.path.join(local_folder, os.path.relpath(obj.key, s3_folder))
+            os.makedirs(os.path.dirname(target), exist_ok=True)
+            bucket.download_file(obj.key, target)
+            print(f"Downloaded {obj.key} to {target}")
