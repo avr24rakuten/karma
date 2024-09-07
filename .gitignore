@@ -2,5 +2,6 @@ model_api/models/best_vgg16_model.h5
 model_api/models/best_lstm_model.h5
 /ignore/
 /test/
+/test_int/test.py
 /z_private/
 secret.env
