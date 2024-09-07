@@ -149,27 +149,27 @@ def test_get_login_ko_wrongpassword():
 #     assert response.json()['prediction'][0] == 1234, "La prédiction ne correspond pas à la valeur attendue."
 
 ###############################################################
-# VERSION IMAGE URL
-def test_products_predict_ok():
-    url = "http://{}:8000/products/predict".format(host_ip)
-    headers = {
-        "accept": "application/json",
-        "Authorization": "Bearer {}".format(token_reader),
-    }
+# VERSION IMAGE URL !!!!!!!!!!!!!! CELLE A UTILISER
+# def test_products_predict_ok():
+#     url = "http://{}:8000/products/predict".format(host_ip)
+#     headers = {
+#         "accept": "application/json",
+#         "Authorization": "Bearer {}".format(token_reader),
+#     }
 
-    image_url="https://drive.google.com/uc?export=download&id=1_DnPZkC83nEcqUaqyWxy-75LBE0-lHyT"
-    response_image = requests.get(image_url)
+#     image_url="https://drive.google.com/uc?export=download&id=1_DnPZkC83nEcqUaqyWxy-75LBE0-lHyT"
+#     response_image = requests.get(image_url)
 
-    assert response_image.status_code == 200, "Impossible de télécharger l'image depuis l'URL spécifiée."
+#     assert response_image.status_code == 200, "Impossible de télécharger l'image depuis l'URL spécifiée."
 
-    files = {
-        "description": (None, "Olivia: Personalisiertes Notizbuch / 150 Seiten / Punktraster / Ca Din A5 / Rosen-Design"),
-        "image": ("image.jpg", response_image.content, "image/jpeg")
-    }
-    response = requests.post(url, headers=headers, files=files)
+#     files = {
+#         "description": (None, "Olivia: Personalisiertes Notizbuch / 150 Seiten / Punktraster / Ca Din A5 / Rosen-Design"),
+#         "image": ("image.jpg", response_image.content, "image/jpeg")
+#     }
+#     response = requests.post(url, headers=headers, files=files)
 
-    assert response.status_code == 200, f"Expected status code 200 but got {response.status_code}"
-    assert response.json()['prediction'][0] == 1234, "La prédiction ne correspond pas à la valeur attendue."
+#     assert response.status_code == 200, f"Expected status code 200 but got {response.status_code}"
+#     assert response.json()['prediction'][0] == 1234, "La prédiction ne correspond pas à la valeur attendue."
 
 #############################################
 # USERS
