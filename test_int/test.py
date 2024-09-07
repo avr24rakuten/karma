@@ -150,7 +150,7 @@ import os
 url = "http://{}:8000/products/predict".format('172.26.107.175')
 headers = {
     "accept": "application/json",
-    "Authorization": "Bearer {}".format('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTcyMjk3ODgyOX0.LplANs1QjaMGmXL8QNE-_iiU1ojreqEsur0vR68wdAQ'),
+    "Authorization": "Bearer {}".format('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTcyNTgwNDkyNH0.KZ1QMyfEcCmi1NmkcW_jaJsHsudriIZPjmHY4EGWHvI'),
 }
 
 image_url="https://drive.google.com/uc?export=download&id=1_DnPZkC83nEcqUaqyWxy-75LBE0-lHyT"

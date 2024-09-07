@@ -149,7 +149,7 @@ def test_get_login_ko_wrongpassword():
 #     assert response.json()['prediction'][0] == 1234, "La prédiction ne correspond pas à la valeur attendue."
 
 ###############################################################
-# VERSION IMAGE URL
+# VERSION IMAGE URL !!!!!!!!!!!!!! CELLE A UTILISER
 # def test_products_predict_ok():
 #     url = "http://{}:8000/products/predict".format(host_ip)
 #     headers = {
