@@ -21,6 +21,8 @@ services:
       - karma_shared_volume:/app/shared
   karma_model:
     image: avr24rakuten/karma_model:__VERSION__
+    env_file:
+      - ../secret.env
     container_name: karma_model
     networks:
       - karma_network
