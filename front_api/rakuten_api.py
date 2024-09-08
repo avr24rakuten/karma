@@ -38,17 +38,6 @@ server = FastAPI(title='KARMA API')
 # STATUS & HEALTH CHECK SECTION
 #############################################
 
-@server.get('/hello', tags=['status'])
-async def hello():
-    """
-    Return Hello Datascientest
-
-    Example
-    -------
-    curl -X GET -i http://ip_address:port/hello
-    """
-    return "Hello Datascientest"
-
 @server.get('/status', tags=['status'])
 async def get_status():
     """
