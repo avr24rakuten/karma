@@ -1,1 +1,26 @@
+Processus de Réentraînement
+KARMA Project
+
+Ce projet concerne le réentraînement d'un modèle de machine learning utilisant des données récupérées depuis un bucket S3. 
+Le processus inclut le téléchargement des données, le réentraînement du modèle, et l'exécution via un conteneur Docker.
+
+Prérequis:
+
+Python 3.9
+Docker installé
+Accès à AWS S3 avec les bonnes permissions
+Fichiers AWS_ACCESS_KEY_ID et AWS_SECRET_ACCESS_KEY dans le fichier .env
+Configuration du bucket S3 avec les données nécessaires (e.g., X_train.csv, y_train.csv)
+
+Contenu des Fichiers:
+
+download.py : Ce script télécharge les datasets (X_train.csv et y_train.csv) ainsi que les modèles précédents à partir du bucket S3.
+retrain.py : Ce script gère le processus de réentraînement du modèle :
+  Prétraitement des données (suppression des NaN, tokenisation, etc.)
+  Réentraînement du modèle LSTM (texte) et VGG16 (images)
+  Comparaison des metrics "Production" et nouveaux modèles
+  Sauvegarde des modèles réentraînés et upload des nouveaux modèles vers S3
+Dockerfile : Ce fichier contient les instructions pour créer une image Docker qui inclut tous les prérequis pour exécuter le projet, tels que l'installation de dépendances, la configuration de l'environnement, etc.
+.env : Fichier de configuration contenant les informations sensibles (clés AWS, région). Ce fichier n'est pas inclus dans les dépôts Git pour des raisons de sécurité.
+
 
