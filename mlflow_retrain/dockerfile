@@ -1,0 +1,28 @@
+FROM python:3.9-slim
+
+# Définir le répertoire de travail
+WORKDIR /app
+
+# Copier les fichiers de configuration et d'environnement
+COPY requirements.txt .
+COPY secret.env .
+
+# Installer les dépendances
+RUN pip install --upgrade pip
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copier les fichiers de données et les scripts d'entraînement
+COPY data/ ./data/
+COPY train/ ./train/
+
+# Donner les droits d'exécution aux scripts
+RUN chmod +x ./data/download.py
+RUN chmod +x ./train/retrain.py
+
+# Configuration des variables d'environnement AWS
+ENV AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+ENV AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+ENV AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
+
+# Commande de lancement : exécuter download.py puis retrain.py
+CMD ["sh", "-c", "python ./data/download.py && python ./train/retrain.py"]
